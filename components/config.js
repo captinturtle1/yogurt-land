@@ -1,8 +1,8 @@
+export const contractAddress = "";
+
 export const addressesNotLowercase= 
 [
-    "",
-    "",
-    "",
+    ""
 ];
 
 const lower = addressesNotLowercase.map(element => {
