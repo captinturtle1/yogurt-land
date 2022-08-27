@@ -109,21 +109,21 @@ export default function Home() {
   const [errorMessage, setErrorMessage] = useState("");
 
   try {
-  if (typeof window !== 'undefined') {
-    let provider = new ethers.providers.Web3Provider(window.ethereum);
-    if (typeof provider !== 'undefined') {
-      window.ethereum.on('accountsChanged', function (accounts){
-        let selectedAccount = accounts[0];
-        console.log(`Selected account changed to ${selectedAccount}`);
-        updateConnected();
+    if (typeof window !== 'undefined') {
+      let provider = new ethers.providers.Web3Provider(window.ethereum);
+      if (typeof provider !== 'undefined') {
+        window.ethereum.on('accountsChanged', function (accounts){
+          let selectedAccount = accounts[0];
+          console.log(`Selected account changed to ${selectedAccount}`);
+          updateConnected();
+        })
+        window.ethereum.on('chainChanged', function(network){
+          console.log(`Selected network changed to ${network}`);
+          window.location.reload();
       })
-      window.ethereum.on('chainChanged', function(network){
-        console.log(`Selected network changed to ${network}`);
-        window.location.reload();
-    })
-      
+        
+      }
     }
-  }
   } catch (err) {
     console.log("No ethereum service.");
   }
@@ -187,10 +187,11 @@ export default function Home() {
 
   const mint = () => {
     updateConnected();
-    if (supply >= maxSupply) {
+    /*if (supply >= maxSupply) {
+      console.log(supply, maxSupply);
       console.log("Minted out");
       setErrorMessage("Minted out");
-    } else if (balanceOfOwner > 0) {
+    } else*/ if (balanceOfOwner > 0) {
       console.log("Already minted");
       setErrorMessage("Already minted");
     } else if (publicSale) {
