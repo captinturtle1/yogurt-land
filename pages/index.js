@@ -108,6 +108,7 @@ export default function Home() {
   const [balanceOfOwner, setBalanceOfOwner] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
+  try {
   if (typeof window !== 'undefined') {
     let provider = new ethers.providers.Web3Provider(window.ethereum);
     if (typeof provider !== 'undefined') {
@@ -122,6 +123,9 @@ export default function Home() {
     })
       
     }
+  }
+  } catch (err) {
+    console.log("No ethereum service.");
   }
 
   const updateConnected = () => {
