@@ -241,7 +241,7 @@ export default function Home() {
       </Head>
       <meta property="og:title" content="Yogurt Land" />
       <meta property="og:description" content="Welcome to YogurtVerse. Purchase an alpha pass to gain access to a discord of 321 highly skilled NFT traders" />
-      <meta property="og:image" content="banner.png" />
+      <meta property="og:image" content="https://open-graph.opensea.io/v1/collections/yogurt-verse" />
       <div className="m-auto grid">
         <h1 className="text-5xl font-bold pb-5 m-auto">Yogurt Land</h1>
         <h1 className="m-auto pb-5">{displaySupply}</h1>
