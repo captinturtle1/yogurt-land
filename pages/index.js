@@ -165,7 +165,8 @@ export default function Home() {
       let maxSupply = value[1];
       console.log(`${totalSupply}/${maxSupply} minted`)
       setDisplaySupply(`${totalSupply}/${maxSupply}`);
-      setSupply(value);
+      setSupply(totalSupply);
+      setMaxSupply(maxSupply);
     }).catch((err) => {
       console.log(err);
     })
@@ -238,6 +239,9 @@ export default function Home() {
       <Head>
         <title>Yogurt Land</title>
       </Head>
+      <meta property="og:title" content="Yogurt Land" />
+      <meta property="og:description" content="Welcome to YogurtVerse. Purchase an alpha pass to gain access to a discord of 321 highly skilled NFT traders" />
+      <meta property="og:image" content="banner.png" />
       <div className="m-auto grid">
         <h1 className="text-5xl font-bold pb-5 m-auto">Yogurt Land</h1>
         <h1 className="m-auto pb-5">{displaySupply}</h1>
@@ -249,6 +253,7 @@ export default function Home() {
           <a href={`https://etherscan.io/address/${contractAddress}`} className="text-lg font-bold underline decoration-3 transition-all hover:text-gray-300">Contract</a>
         </div>
         <h1 className="m-auto pt-5 text-slate-400">{errorMessage}</h1>
+        <img src=""></img>
       </div>
     </div>
   )
