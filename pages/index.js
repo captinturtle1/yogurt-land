@@ -232,7 +232,7 @@ export default function Home() {
         return;
     }
     console.log("no proof");
-}
+  }
 
   return (
     <div className="flex justify-center h-screen bg-slate-900">
