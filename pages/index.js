@@ -240,7 +240,7 @@ export default function Home() {
   }
 
   return (
-    <div className="flex justify-center h-screen bg-slate-900">
+    <div className="flex justify-center h-screen dark:bg-slate-900">
       <Head>
         <title>Yogurt Verse</title>
         <meta property="og:title" content="Yogurt Verse" />
