@@ -1,269 +1,28 @@
-import React, { useState } from 'react';
 import Head from 'next/head'
-import { addresses, contractAddress } from "../components/config";
-import { ethers } from "ethers";
-import abi from '../components/abi.json'
-const { MerkleTree } = require('merkletreejs')
-const keccak256 = require('keccak256');
 
-let selectedAccount;
-let nftContract;
-let isInitialized = false;
-
-const initWeb3 = async () => {
-    let provider = new ethers.providers.Web3Provider(window.ethereum);
-    let signer = provider.getSigner();
-
-    nftContract = new ethers.Contract(contractAddress, abi, signer);
-
-    isInitialized = true;
-}
-
-async function requestAccount() {
-  if (window.ethereum) {
-      try {
-          const accounts = await window.ethereum.request({
-              method: "eth_requestAccounts"
-          });
-          selectedAccount = accounts[0];
-          return accounts[0];
-      } catch (error) {
-      }
-  } else {
-  }
-}
-
-async function getAccount() {
-  if (window.ethereum) {
-      console.log("Wallet detected");
-      try {
-          const accounts = await window.ethereum.request({
-              method: "eth_accounts"
-          });
-          selectedAccount = accounts[0];
-          console.log(selectedAccount, "Is connected");
-          return accounts[0];
-      } catch (error) {
-          console.log("Error connecting...");
-      }
-  } else {
-      console.log("No wallet detected");
-  }
-}
-
-const mintPublic = async () => {
-  if (!isInitialized) {
-    await initWeb3();
-  }
-  return nftContract.publicMint();
-};
-
-const mintPrivate = async (proof) => {
-  if (!isInitialized) {
-    await initWeb3();
-  }
-  return nftContract.whitelistMint(proof);
-};
-
-const checkPrivateSale = async () => {
-  if (!isInitialized) {
-      await initWeb3();
-  }
-  let isPaused = await nftContract.privateSale();
-  return isPaused;
-};
-
-const checkPublicSale = async () => {
-  if (!isInitialized) {
-      await initWeb3();
-  }
-  let isPaused = await nftContract.publicSale();
-  return isPaused;
-};
-
-const checkSupply = async () => {
-  if (!isInitialized) {
-      await initWeb3();
-  }
-  let maxSupply = await nftContract.maxSupply();
-  let totalSupply = await nftContract.totalSupply();
-  return [totalSupply, maxSupply];
-};
-
-const checkBalanceOf = async (address) => {
-  if (!isInitialized) {
-      await initWeb3();
-  }
-  return await nftContract.balanceOf(address);
-};
+import Landing from '../components/Landing';
+import Navbar from '../components/Navbar';
+import Mint from '../components/Mint';
+import About from '../components/About';
+import ExampleSlide from '../components/ExampleSlide';
+import Faq from '../components/Faq';
+import Footer from '../components/Footer';
 
 export default function Home() {
-  const [walletAddress, setWalletAddress] = useState();
-  const [proof, setProof] = useState([]);
-  const [privateSale, setPrivateSale] = useState();
-  const [publicSale, setPublicSale] = useState();
-  const [supply, setSupply] = useState("");
-  const [maxSupply, setMaxSupply] = useState("");
-  const [displaySupply, setDisplaySupply] = useState("");
-  const [balanceOfOwner, setBalanceOfOwner] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
-
-  try {
-    if (typeof window !== 'undefined') {
-      let provider = new ethers.providers.Web3Provider(window.ethereum);
-      if (typeof provider !== 'undefined') {
-        window.ethereum.on('accountsChanged', function (accounts){
-          let selectedAccount = accounts[0];
-          console.log(`Selected account changed to ${selectedAccount}`);
-          updateConnected();
-        })
-        window.ethereum.on('chainChanged', function(network){
-          console.log(`Selected network changed to ${network}`);
-          window.location.reload();
-      })
-        
-      }
-    }
-  } catch (err) {
-    console.log("No ethereum service.");
-  }
-
-  const updateConnected = () => {
-    requestAccount().then(value => {
-      getAccount().then(value => {
-        setWalletAddress(value);
-        getPrivateSaleStatus();
-        getPublicSaleStatus();
-        getSupply();
-        getProof(value);
-        getBalanceOfAddress(value);
-      }).catch((err) => {
-        console.log(err);
-      })
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-
-  const getPrivateSaleStatus = () => {
-    checkPrivateSale().then(value => {
-      console.log(`private sale is ${value}`);
-      setPrivateSale(value);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-
-  const getPublicSaleStatus = () => {
-    checkPublicSale().then(value => {
-      console.log(`public sale is ${value}`);
-      setPublicSale(value);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-
-  const getSupply = () => {
-    checkSupply().then(value => {
-      let totalSupply = value[0];
-      let maxSupply = value[1];
-      console.log(`${totalSupply}/${maxSupply} minted`)
-      setDisplaySupply(`${totalSupply}/${maxSupply}`);
-      setSupply(totalSupply);
-      setMaxSupply(maxSupply);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-
-  const getBalanceOfAddress = (address) => {
-    checkBalanceOf(address).then(value => {
-      setBalanceOfOwner(value);
-      console.log(`address owns ${value.toString()} pass(s)`);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-
-  const mint = () => {
-    updateConnected();
-    /*if (supply >= maxSupply) {
-      console.log(supply, maxSupply);
-      console.log("Minted out");
-      setErrorMessage("Minted out");
-    } else*/ if (balanceOfOwner > 0) {
-      console.log("Already minted");
-      setErrorMessage("Already minted");
-    } else if (publicSale) {
-      console.log("Minting public");
-      setErrorMessage("Minting public...");
-      mintPublic().then(tx => {
-        console.log(tx);
-        setErrorMessage("Minted");
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    } else if (privateSale && proof.length > 0 ) {
-      console.log("Minting private");
-      setErrorMessage("Minting whitelist...");
-      mintPrivate(proof).then(tx => {
-        console.log(tx);
-        setErrorMessage("Minted");
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    } else if (privateSale) {
-      console.log("Not witelisted");
-      setErrorMessage("Not whitelisted");
-    } else {
-      console.log("Not live");
-      setErrorMessage("Not live");
-    }
-  }
-
-  const leafNodes = addresses.map(addr => keccak256(addr));
-  const merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true});
-
-  function getProof(address) {
-    console.log("getting proof");
-    const check = addresses.findIndex(element => element == address);
-    if (check > -1) {
-        const addressIndex = leafNodes[check];
-        const hexProof = merkleTree.getHexProof(addressIndex);
-        setProof(hexProof);
-        console.log(`${hexProof} is your proof`);
-        return;
-    }
-    console.log("no proof");
-  }
-
   return (
-    <div className="flex justify-center h-screen dark:bg-slate-900">
+    <div>
       <Head>
-        <title>Yogurt Verse</title>
-        <meta property="og:title" content="Yogurt Verse" />
-        <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://www.yogurtverse.xyz/" />
-        <meta property="og:image" content="https://open-graph.opensea.io/v1/collections/yogurt-verse" />
-        <meta property="og:description" content="Welcome to YogurtVerse. Purchase an alpha pass to gain access to a discord of 321 highly skilled NFT traders" />
-        <meta name="theme-color" content="#0f172a" />
-        <meta name="twitter:card" content="summary_large_image" />
+        <title>Gurts</title>
+        <meta name="description" content="Gurts webpage"/>
+        <link rel="icon" href="/favicon.ico"/>
       </Head>
-      <div className="m-auto grid">
-        <h1 className="text-5xl font-bold pb-5 m-auto">Yogurt Land</h1>
-        <h1 className="m-auto pb-5">{displaySupply}</h1>
-        <button onClick={walletAddress === undefined ? updateConnected : mint} className={walletAddress === undefined ? "m-auto bg-red-500 px-5 py-1 rounded-full text-xl drop-shadow-[0px_7px_0px_rgba(0,0,0,1)] transition-all hover:bg-red-400 hover:translate-y-[2px] hover:drop-shadow-[0px_3px_0px_rgba(0,0,0,1)]" : "m-auto bg-green-500 px-5 py-1 rounded-full text-xl drop-shadow-[0px_7px_0px_rgba(0,0,0,1)] transition-all hover:bg-green-400 hover:translate-y-[2px] hover:drop-shadow-[0px_3px_0px_rgba(0,0,0,1)]"}>
-          <div className={walletAddress === undefined ? "hidden" : "block"}>Mint</div>
-          <div className={walletAddress === undefined ? "block" : "hidden"}>Connect</div>
-        </button>
-        <div className="m-auto pt-5">
-          <a href={`https://etherscan.io/address/${contractAddress}`} className="text-lg font-bold underline decoration-3 transition-all hover:text-gray-300">Contract</a>
-        </div>
-        <h1 className="m-auto pt-5 text-slate-400">{errorMessage}</h1>
-        <img src=""></img>
-      </div>
+      <Navbar/>
+      <Landing/>
+      <Mint/>
+      <About/>
+      <ExampleSlide/>
+      <Faq/>
+      <Footer/>
     </div>
   )
 }
