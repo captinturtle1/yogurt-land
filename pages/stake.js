@@ -3,8 +3,12 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
+import { getGurtsTotalSupply, getTotalStaked } from '../components/etherscomponents/contractFunctions';
+
 export default function Navbar() {
     const [connectedWallet, setConnectedWallet] = useState();
+    const [gurtsTotalSupply, setGurtsTotalSupply] = useState(0);
+    const [totalStaked, setTotalStaked] = useState(0);
 
     useEffect(() => {
         // checks if ethereum provider is detected
@@ -33,6 +37,22 @@ export default function Navbar() {
             console.log("No ethereum service.");
         }
     },[connectedWallet]);
+
+    useEffect(() => {
+        getGurtsTotalSupply().then(value => {
+            console.log("supply: ", value);
+            if (value != false) {
+                setGurtsTotalSupply(value);
+            }
+        }).catch(console.log);
+
+        getTotalStaked().then(value => {
+            console.log("staked: ", value);
+            if (value != false) {
+                setTotalStaked(value);
+            }
+        }).catch(console.log);
+    });
 
     const requestAccount = async () => {
         try {
@@ -73,7 +93,9 @@ export default function Navbar() {
         </div>
         <div className="h-screen bg-[#765050] flex visible">
             <div className="w-full mx-64 my-32 drop-shadow-xl grid grid-cols-3 visible">
-                <div className={connectedWallet !== undefined ? "bg-orange-100 m-10 rounded-xl opacity-100 transition-all translate-x-0 visible delay-100" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all translate-x-96 invisible"}></div>
+                <div className={connectedWallet !== undefined ? "bg-orange-100 m-10 rounded-xl opacity-100 transition-all translate-x-0 visible delay-100 flex" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all translate-x-96 invisible flex"}>
+                    <div className="text-black m-auto font-bold">{totalStaked}/{gurtsTotalSupply}</div>
+                </div>
                 <div onClick={requestAccount} className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full m-auto flex" : "m-auto text-black font-bold flex p-2 rounded bg-orange-100 hover:bg-orange-200 cursor-pointer select-none transition-all visible opacity-100 w-24 h-10 delay-100"}>
                     {connectedWallet !== undefined ? (<div className="m-auto text-black font-bold select-none">Swag</div>):(<div className="m-auto select-none">Connect</div>)}
                 </div>

@@ -15,8 +15,8 @@ export default function About() {
       <div className="my-auto flex gap-10 p-10 lg:p-0 z-[2]">
         <div className="top-[120px] right-0 w-2 h-96 bg-pink-200 rounded-full "></div>
         <div>
-          <div className="text-4xl lg:text-5xl font-bold my-5 flex">About</div>
-          <div className="w-auto max-w-[500px] text-sm lg:text-lg">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam interdum tincidunt lectus luctus vestibulum. Donec mollis nisl nec elit vestibulum, ut rutrum purus aliquet. Donec aliquet felis id odio porta sollicitudin. Fusce ac quam finibus, tincidunt sapien id, condimentum mauris. Suspendisse turpis magna, pretium sed libero sed, hendrerit viverra odio. Donec auctor nisi turpis, ac blandit quam maximus quis. Nam vel sem porta, sagittis ante sit amet, consectetur tellus. Phasellus arcu erat, elementum ut ante id, luctus efficitur justo.</div>
+          <div className="text-4xl lg:text-5xl font-bold my-5 flex text-white">About</div>
+          <div className="w-auto max-w-[500px] text-sm lg:text-lg text-white">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam interdum tincidunt lectus luctus vestibulum. Donec mollis nisl nec elit vestibulum, ut rutrum purus aliquet. Donec aliquet felis id odio porta sollicitudin. Fusce ac quam finibus, tincidunt sapien id, condimentum mauris. Suspendisse turpis magna, pretium sed libero sed, hendrerit viverra odio. Donec auctor nisi turpis, ac blandit quam maximus quis. Nam vel sem porta, sagittis ante sit amet, consectetur tellus. Phasellus arcu erat, elementum ut ante id, luctus efficitur justo.</div>
         </div>
       </div>
     </div>
