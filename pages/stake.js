@@ -3,12 +3,15 @@ import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
 
+import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
+
 import { getGurtsTotalSupply, getTotalStaked } from '../components/etherscomponents/contractFunctions';
 
 export default function Navbar() {
     const [connectedWallet, setConnectedWallet] = useState();
     const [gurtsTotalSupply, setGurtsTotalSupply] = useState(0);
     const [totalStaked, setTotalStaked] = useState(0);
+    const [userTokensArray, setUserTokensArray] = useState([1,2,3,4,5]);
 
     useEffect(() => {
         // checks if ethereum provider is detected
@@ -73,6 +76,12 @@ export default function Navbar() {
         }
     }
 
+    const tokenCards = userTokensArray.map((element, index) =>
+    <div key={index} className="bg-red-500 w-10 h-10">
+        {element}
+    </div>
+  );
+
     return (
       <div>
         <Head>
@@ -93,11 +102,34 @@ export default function Navbar() {
         </div>
         <div className="h-screen bg-[#765050] flex visible">
             <div className="w-full mx-64 my-32 drop-shadow-xl grid grid-cols-3 visible">
-                <div className={connectedWallet !== undefined ? "bg-orange-100 m-10 rounded-xl opacity-100 transition-all translate-x-0 visible delay-100 flex" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all translate-x-96 invisible flex"}>
-                    <div className="text-black m-auto font-bold">{totalStaked}/{gurtsTotalSupply}</div>
+                <div className={connectedWallet !== undefined ? "bg-orange-100 m-10 rounded-xl opacity-100 transition-all translate-x-0 visible delay-100 flex flex-col" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all translate-x-96 invisible flex flex-col"}>
+                    <div className="text-black mx-auto mt-auto font-bold text-4xl mb-10">Collection Staked</div>
+                    <div className="w-64 mx-auto mb-10">
+                        <CircularProgressbarWithChildren
+                            value={totalStaked}
+                            maxValue={gurtsTotalSupply}
+                            strokeWidth={14}
+                            styles={{
+                                path: {stroke: `#8f6464`, strokeLinecap: 'butt', transition: 'stroke-dashoffset 0.5s ease 0s', transform: 'rotate(0.50turn)', transformOrigin: 'center center'},
+                                trail: {stroke: '#8f646480', strokeLinecap: 'butt', transform: 'rotate(0.50turn)', transformOrigin: 'center center'},
+                            }}
+                        ><div className="font-bold text-5xl text-[#765050]">{(totalStaked / gurtsTotalSupply) * 100}%</div></CircularProgressbarWithChildren>
+                    </div>
+                    <div className="text-black mx-auto font-bold text-4xl">Total</div>
+                    <div className="text-[#8f6464] mx-auto mb-auto font-bold text-3xl">{totalStaked}/{gurtsTotalSupply}</div>
                 </div>
                 <div onClick={requestAccount} className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full m-auto flex" : "m-auto text-black font-bold flex p-2 rounded bg-orange-100 hover:bg-orange-200 cursor-pointer select-none transition-all visible opacity-100 w-24 h-10 delay-100"}>
-                    {connectedWallet !== undefined ? (<div className="m-auto text-black font-bold select-none">Swag</div>):(<div className="m-auto select-none">Connect</div>)}
+                    {connectedWallet !== undefined ?
+                        (
+                            <div className="m-auto text-black font-bold select-none flex flex-col">
+                                <div className="text-black mx-auto mt-auto font-bold text-4xl mb-10">Collection Staked</div>
+                                {tokenCards}
+                                <div className="text-black mx-auto font-bold text-4xl">Total</div>
+                                <div className="text-[#8f6464] mx-auto mb-auto font-bold text-3xl">{totalStaked}/{gurtsTotalSupply}</div>
+                            </div>
+                        ):(
+                            <div className="m-auto select-none">Connect</div>
+                        )}
                 </div>
                 <div className={connectedWallet !== undefined ? "bg-orange-100 m-10 rounded-xl opacity-100 transition-all translate-x-0 visible delay-100" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all -translate-x-96 invisible"}></div>
             </div>
