@@ -149,9 +149,9 @@ export default function Navbar() {
     const tokenCards = userAllTokens.map((element, index) => 
         <div className="flex flex-col gap-5">
             <div key={index} className="bg-[#765050] p-8 rounded-xl relative drop-shadow-lg">
-                <img src={userTokensData[index] === undefined ? "placeholder.png" : userTokensData[index][0]} className="w-[300px] h-[300px] rounded-xl"/>
+                <img src={userTokensData[index] === undefined ? "placeholder.png" : userTokensData[index][0]} className="w-[200px] h-[200px] lg:w-[300px] lg:h-[300px] rounded-xl object-cover animate-introSlide"/>
                 <div className="absolute left-4 bottom-32 w-32 bg-red-400 text-white text-center text-3xl drop-shadow">Gurt #{element}</div>
-                <div className="mt-6 text-lg text-white">
+                <div className="mt-6 lg:text-lg text-white">
                     <div>Total Stake: {userTokensData[index] === undefined ? "fetching..." : userTokensData[index][2]}</div>
                     {userTokensData[index] === undefined ? "fetching..." : userTokensData[index][1] != 0 ? (<div>Current Stake: {((Math.floor(Date.now() / 1000) - userTokensData[index][1]) / 86400).toFixed(2)}/Days</div>):(<div>Not Staked</div>)}
                     
@@ -183,18 +183,18 @@ export default function Navbar() {
                 <div className="font-bold my-auto text-2xl">Gurts</div>
             </div>
             <Link href="/">
-                <div className="absolute right-0 h-16 hidden lg:flex mr-16">
+                <div className="absolute right-0 h-16 flex mr-16">
                     <div className="m-auto bg-[#765050] hover:bg-[#8f6464] active:bg-[#5e3f3f] px-5 py-2 text-white rounded-full font-bold transition-all cursor-pointer">
                         <a>Home</a>
                     </div>
                 </div>
             </Link>
         </div>
-        <div className="h-screen bg-[#765050] flex visible">
-            <div className="w-full mx-64 my-32 drop-shadow-xl grid grid-cols-3 visible">
-                <div className={connectedWallet !== undefined ? "bg-orange-100 m-10 rounded-xl opacity-100 transition-all translate-x-0 visible delay-100 flex flex-col" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all translate-x-96 invisible flex flex-col"}>
-                    <div className="text-black mx-auto mt-auto font-bold text-4xl mb-10">Collection Staked</div>
-                    <div className="w-64 mx-auto mb-10">
+        <div className="h-[2000px] lg:h-screen bg-[#765050] flex visible">
+            <div className="w-full mx-5 2xl:mx-64 my-32 drop-shadow-xl grid grid-cols-1 lg:grid-cols-3 visible gap-10">
+                <div className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full lg:h-[80%] m-auto p-10 flex flex-col max-w-[400px] lg:max-w-none" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all translate-x-96 invisible flex flex-col"}>
+                    <div className="text-black mx-auto mt-auto font-bold text-center text-4xl mb-10">Collection Staked</div>
+                    <div className="w-48 lg:w-52 xl:w-64 mx-auto mb-10">
                         <CircularProgressbarWithChildren
                             value={totalStaked}
                             maxValue={gurtsTotalSupply}
@@ -208,7 +208,7 @@ export default function Navbar() {
                     <div className="text-black mx-auto font-bold text-4xl">Total</div>
                     <div className="text-[#8f6464] mx-auto mb-auto font-bold text-3xl">{totalStaked}/{gurtsTotalSupply}</div>
                 </div>
-                <div onClick={requestAccount} className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full m-auto flex" : "m-auto text-black font-bold flex p-2 rounded bg-orange-100 hover:bg-orange-200 cursor-pointer select-none transition-all visible opacity-100 w-24 h-10 delay-100"}>
+                <div onClick={requestAccount} className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full m-auto flex p-10 max-w-[400px] lg:max-w-none" : "m-auto text-black font-bold flex p-2 rounded bg-orange-100 hover:bg-orange-200 cursor-pointer select-none transition-all visible opacity-100 w-24 h-10 delay-100"}>
                     {connectedWallet !== undefined ?
                         (
                             <div className="m-auto text-black font-bold select-none flex flex-col">
@@ -230,7 +230,7 @@ export default function Navbar() {
                             <div className="m-auto select-none">Connect</div>
                         )}
                 </div>
-                <div className={connectedWallet !== undefined ? "bg-orange-100 m-10 rounded-xl opacity-100 transition-all translate-x-0 visible delay-100 flex flex-col" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all -translate-x-96 invisible flex flex-col"}>
+                <div className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full lg:h-[80%] m-auto p-10 flex flex-col max-w-[400px] lg:max-w-none" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all -translate-x-96 invisible flex flex-col"}>
                     <div className="text-black mx-auto mt-auto font-bold text-4xl">Your Stats</div>
                     <div className="text-[#8f6464] mx-auto font-bold text-3xl flex flex-col items-center mb-8">
                         <div>Held: {userGurts.length}</div>

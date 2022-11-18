@@ -9,7 +9,8 @@ module.exports = {
     extend: {
       animation: {
         wiggle: 'wiggle 1s ease-in-out infinite',
-        slide: 'slide 20s linear infinite'
+        slide: 'slide 20s linear infinite',
+        introSlide: 'introSlide 0.1s ease-in'
       },
       keyframes: {
         wiggle: {
@@ -19,6 +20,10 @@ module.exports = {
         slide: {
           '0%': { transform: 'translateX(0)'},
           '100%': { transform: 'translateX(-50%)'}
+        },
+        introSlide: {
+          '0%': { transform: 'translateX(20px)', opacity: 0},
+          '100%': { transform: 'translateX(0px)', opacity: 100}
         }
       },
       fontFamily: {
