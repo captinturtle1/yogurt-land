@@ -19,9 +19,11 @@ export default function Navbar() {
           <ScrollLink to="Faq" spy={true} smooth={true} offset={0} duration={600} className="text-black hover:text-zinc-500 active:text-zinc-600 transition-all cursor-pointer">faq</ScrollLink>
       </div>
       <div className="absolute right-0 h-16 hidden lg:flex mr-16">
-        <div className="m-auto bg-[#765050] hover:bg-[#8f6464] active:bg-[#5e3f3f] px-5 py-2 text-white rounded-full font-bold transition-all cursor-pointer">
-          <Link href="/stake">Stake</Link>
-        </div>
+        <Link href="/stake">
+          <div className="m-auto bg-[#765050] hover:bg-[#8f6464] active:bg-[#5e3f3f] px-5 py-2 text-white rounded-full font-bold transition-all cursor-pointer">
+            <a>Stake</a>
+          </div>
+        </Link>
       </div>
       <div className=" flex lg:hidden">
           <AiOutlineMenu onClick={() => setMobileMenu(!mobileMenu)} className={mobileMenu ? "absolute right-0 h-16 mr-16 cursor-pointer text-2xl invisible opacity-0 transition-all" : "absolute right-0 h-16 mr-16 cursor-pointer text-2xl visible opacity-100 transition-all"}/>
@@ -33,9 +35,11 @@ export default function Navbar() {
         <ScrollLink onClick={() => setMobileMenu(false)} to="Mint" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 active:text-zinc-400 transition-all cursor-pointer">mint</ScrollLink>
         <ScrollLink onClick={() => setMobileMenu(false)} to="About" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 active:text-zinc-400 transition-all cursor-pointer">about</ScrollLink>
         <ScrollLink onClick={() => setMobileMenu(false)} to="Faq" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 active:text-zinc-400 transition-all cursor-pointer">faq</ScrollLink>
-        <div className="mt-10 bg-zinc-800 hover:bg-zinc-900 active:bg-zinc-700 px-5 py-2 text-white rounded-full font-bold transition-all cursor-pointer">
-          <Link href="/stake" >Stake</Link>
-        </div>
+        <Link href="/stake">
+          <div className="mt-10 bg-zinc-800 hover:bg-zinc-900 active:bg-zinc-700 px-5 py-2 text-white rounded-full font-bold transition-all cursor-pointer">
+            <a>Stake</a>
+          </div>
+        </Link>
       </div>
     </div>
     </div>
