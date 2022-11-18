@@ -1,5 +1,5 @@
-export const gurtsContract = "0x8fC17C3D91089288171c3aD7E5a9dc9Eb60D7100";
-export const stakeContract = "0x57Bf11BcCA59619CB851e29792ee0E002B5e766D";
+export const gurtsContract = "0x9193Ff65DB0f49Bd6A5AFD18f7fE9Ed7Fd6CB1E7";
+export const stakeContract = "0xda2195aF20ef36Bed152FfCFB15Da117E2dEcb00";
 
 const whitelistedAddresses =
 [

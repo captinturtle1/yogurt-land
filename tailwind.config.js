@@ -20,12 +20,12 @@ module.exports = {
           '0%': { transform: 'translateX(0)'},
           '100%': { transform: 'translateX(-50%)'}
         }
+      },
+      fontFamily: {
+        'sans': ['Helvetica', 'Arial', 'sans-serif'],
+        'serif': ['ui-serif', 'Georgia'],
+        'mono': ['ui-monospace', 'SFMono-Regular']
       }
-    },
-    fontFamily: {
-      'sans': ['Helvetica', 'Arial', 'sans-serif'],
-      'serif': ['ui-serif', 'Georgia'],
-      'mono': ['ui-monospace', 'SFMono-Regular']
     }
   },
   plugins: [],
