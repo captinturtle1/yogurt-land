@@ -6,7 +6,19 @@ import Link from 'next/link';
 
 import { CircularProgressbarWithChildren } from 'react-circular-progressbar';
 
-import { getGurtsTotalSupply, getbaseUri, getTotalStaked, getUserTokensGurts, getUserTokensStaked, getUserStakePoints, getTokenInfo, depositGurts, withdrawGurts } from '../components/etherscomponents/contractFunctions';
+import {
+    getGurtsTotalSupply,
+    getbaseUri,
+    getTotalStaked,
+    getUserTokensGurts,
+    getUserTokensStaked,
+    getUserStakePoints,
+    getTokenInfo,
+    depositGurts,
+    withdrawGurts,
+    getApprovedStatus,
+    approveStakeContract
+} from '../components/etherscomponents/contractFunctions';
 
 export default function Navbar() {
     const [connectedWallet, setConnectedWallet] = useState();
@@ -22,6 +34,7 @@ export default function Navbar() {
     const [batchOption, setBatchOption] = useState(0);
     const [selectedWithdraw, setSelectedWithdraw] = useState([]);
     const [selectedDeposit, setSelectedDeposit] = useState([]);
+    const [stakeApproved, setStakeApproved] = useState(false);
 
     useEffect(() => {
         // checks if ethereum provider is detected
@@ -103,6 +116,11 @@ export default function Navbar() {
                 setUserStakePoints(points);
             }).catch(console.log);
 
+            getApprovedStatus(accounts[0]).then(response => {
+                setStakeApproved(response);
+                console.log("is approved: ", response);
+            }).catch(console.log);
+
         } catch (err) {
             console.log(err);
         }
@@ -163,6 +181,17 @@ export default function Navbar() {
         }).catch(console.log);
     }
 
+    const callApproveStakeContract = () => {
+        approveStakeContract().then(tx => {
+            console.log(tx);
+            tx.wait(1).then(response => {
+                console.log(response);
+                getAccount();
+                getCollectionStats();
+            });
+        }).catch(console.log);
+    }
+
     const handleSelectWithdraw = (tokenId) => {
         let tokenSelectedArray = [];
         tokenSelectedArray = selectedWithdraw;
@@ -199,9 +228,15 @@ export default function Navbar() {
             </div>
             <div className="grow"/>
             <div className="flex gap-4">
-                <div onClick={userStakedGurts.includes(element) ? () => callWithdrawToken([element]) : () => callDepositGurts([element])} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
-                    <div className="m-auto text-white text-2xl">{userStakedGurts.includes(element) ? (<>Withdraw</>):(<>Deposit</>)}</div>
-                </div>
+                {stakeApproved ? (
+                    <div onClick={userStakedGurts.includes(element) ? () => callWithdrawToken([element]) : () => callDepositGurts([element])} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
+                        <div className="m-auto text-white text-2xl">{userStakedGurts.includes(element) ? (<>Withdraw</>):(<>Deposit</>)}</div>
+                    </div>
+                ):(
+                    <div onClick={userStakedGurts.includes(element) ? () => callWithdrawToken([element]) : callApproveStakeContract} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
+                        <div className="m-auto text-white text-2xl">{userStakedGurts.includes(element) ? (<>Withdraw</>):(<>Set Approval</>)}</div>
+                    </div>
+                )}
                 <div onClick={() => setDashboardState(1)} className="h-16 bg-blue-400 hover:bg-blue-300 active:bg-blue-400 transition-all rounded-xl flex cursor-pointer">
                     <TbStack3 className="w-16 m-auto text-white text-2xl"/>
                 </div>
@@ -312,9 +347,15 @@ export default function Navbar() {
                                             )}
                                             <div className="grow"/>
                                             <div className="flex gap-4">
-                                                <div onClick={batchOption == 0 ?  () => callDepositGurts(selectedDeposit) : () => callWithdrawToken(selectedWithdraw)} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
-                                                    <div className="m-auto text-white text-2xl">{batchOption == 0 ? (<>Deposit</>):(<>Withdraw</>)}</div>
-                                                </div>
+                                                {stakeApproved ? (
+                                                    <div onClick={batchOption == 0 ?  () => callDepositGurts(selectedDeposit) : () => callWithdrawToken(selectedWithdraw)} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
+                                                        <div className="m-auto text-white text-2xl">{batchOption == 0 ? (<>Deposit</>):(<>Withdraw</>)}</div>
+                                                    </div>
+                                                ):(
+                                                    <div onClick={batchOption == 0 ?  callApproveStakeContract : () => callWithdrawToken(selectedWithdraw)} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
+                                                        <div className="m-auto text-white text-2xl">{batchOption == 0 ? (<>Set Approval</>):(<>Withdraw</>)}</div>
+                                                    </div>
+                                                )}
                                                 <div onClick={() => setDashboardState(0)} className="h-16 bg-blue-400 hover:bg-blue-300 active:bg-blue-400 transition-all rounded-xl flex cursor-pointer">
                                                     <TbStack className="w-16 m-auto text-white text-2xl"/>
                                                 </div>

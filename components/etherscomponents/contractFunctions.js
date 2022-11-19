@@ -101,7 +101,7 @@ export const getTokenInfo = (tokenId) => new Promise (async resolve => {
 
 export const depositGurts = (tokenIds) => new Promise (async resolve => {
     try {
-        console.log(tokenIds);
+        console.log("Depositing: ", tokenIds);
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
         let contract = new ethers.Contract(stakeContract, stakeAbi, signer);
@@ -115,12 +115,37 @@ export const depositGurts = (tokenIds) => new Promise (async resolve => {
 
 export const withdrawGurts = (tokenIds) => new Promise (async resolve => {
     try {
-        console.log(tokenIds);
+        console.log("Withdrawing: ", tokenIds);
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
         let contract = new ethers.Contract(stakeContract, stakeAbi, signer);
 
         resolve(await contract.withdraw(tokenIds));
+    } catch(err) {
+        console.log(err);
+    }
+})
+
+export const getApprovedStatus = (address) => new Promise (async resolve => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+        
+        let status = await contract.isApprovedForAll(address, stakeContract);
+        resolve(status);
+    } catch(err) {
+        console.log(err);
+    }
+})
+
+export const approveStakeContract = () => new Promise (async resolve => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        resolve(await contract.setApprovalForAll(stakeContract, true));
     } catch(err) {
         console.log(err);
     }
