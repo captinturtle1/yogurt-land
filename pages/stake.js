@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import { useState, useEffect } from 'react';
+import { TbStack3, TbStack } from 'react-icons/Tb';
 import Head from 'next/head';
 import Link from 'next/link';
 
@@ -17,6 +18,10 @@ export default function Navbar() {
     const [userStakePoints, setUserStakePoints] = useState(0);
     const [selectedToken, setSelectedToken] = useState();
     const [userTokensData, setUserTokensData] = useState([]);
+    const [dashboardState, setDashboardState] = useState(0);
+    const [batchOption, setBatchOption] = useState(0);
+    const [selectedWithdraw, setSelectedWithdraw] = useState([]);
+    const [selectedDeposit, setSelectedDeposit] = useState([]);
 
     useEffect(() => {
         // checks if ethereum provider is detected
@@ -47,20 +52,22 @@ export default function Navbar() {
     },[connectedWallet]);
 
     useEffect(() => {
+        getCollectionStats();
+    });
+
+    const getCollectionStats = () => {
         getGurtsTotalSupply().then(value => {
-            console.log("supply: ", value);
             if (value != false) {
                 setGurtsTotalSupply(value);
             }
         }).catch(console.log);
 
         getTotalStaked().then(value => {
-            console.log("staked: ", value);
             if (value != false) {
                 setTotalStaked(value);
             }
         }).catch(console.log);
-    });
+    }
 
     const requestAccount = async () => {
         try {
@@ -135,38 +142,70 @@ export default function Navbar() {
     const callWithdrawToken = (tokenArray) => {
         withdrawGurts(tokenArray).then(tx => {
             console.log(tx);
-            tx.wait(1).then(console.log);
+            tx.wait(1).then(response => {
+                console.log(response);
+                getAccount();
+                getCollectionStats();
+            });
         }).catch(console.log);
     }
 
     const callDepositGurts = (tokenArray) => {
         depositGurts(tokenArray).then(tx => {
             console.log(tx);
-            tx.wait(1).then(console.log);
+            tx.wait(1).then(response => {
+                console.log(response);
+                getAccount();
+                getCollectionStats();
+            });
         }).catch(console.log);
     }
 
+    const handleSelectWithdraw = (tokenId) => {
+        let tokenSelectedArray = [];
+        tokenSelectedArray = selectedWithdraw;
+        if (tokenSelectedArray.includes(tokenId)) {
+            tokenSelectedArray.splice(tokenSelectedArray.indexOf(tokenId), 1);
+        } else {
+            tokenSelectedArray.push(tokenId);
+        }
+        setSelectedWithdraw([...tokenSelectedArray]);
+        console.log(tokenSelectedArray);
+    }
+
+    const handleSelectedDeposit = (tokenId) => {
+        let tokenSelectedArray = [];
+        tokenSelectedArray = selectedDeposit;
+        if (tokenSelectedArray.includes(tokenId)) {
+            tokenSelectedArray.splice(tokenSelectedArray.indexOf(tokenId), 1);
+        } else {
+            tokenSelectedArray.push(tokenId);
+        }
+        setSelectedDeposit([...tokenSelectedArray]);
+        console.log(tokenSelectedArray);
+    }
+
     const tokenCards = userAllTokens.map((element, index) => 
-        <div className="flex flex-col gap-5">
-            <div key={index} className="bg-[#765050] p-8 rounded-xl relative drop-shadow-lg">
-                <img src={userTokensData[index] === undefined ? "placeholder.png" : userTokensData[index][0]} className="w-[200px] h-[200px] lg:w-[300px] lg:h-[300px] rounded-xl object-cover animate-introSlide"/>
-                <div className="absolute left-4 bottom-32 w-32 bg-red-400 text-white text-center text-3xl drop-shadow">Gurt #{element}</div>
+        <div className="flex flex-col w-full h-full gap-5">
+            <div key={index} className="bg-[#765050] p-8 rounded-xl drop-shadow-lg m-auto">
+                <div className="relative">
+                    <img src={userTokensData[index] === undefined ? "placeholder.png" : userTokensData[index][0]} className="rounded-xl object-cover animate-introSlide"/>
+                    <div className="absolute -left-2 bottom-8 w-32 bg-red-400 text-white text-center text-3xl drop-shadow">Gurt #{element}</div>
+                </div>
                 <div className="mt-6 lg:text-lg text-white">
-                    <div>Total Stake: {userTokensData[index] === undefined ? "fetching..." : userTokensData[index][2]}</div>
+                    <div>Total Stake: {userTokensData[index] === undefined ? "fetching..." : (userTokensData[index][2] / 86400).toFixed(2)}/Days</div>
                     {userTokensData[index] === undefined ? "fetching..." : userTokensData[index][1] != 0 ? (<div>Current Stake: {((Math.floor(Date.now() / 1000) - userTokensData[index][1]) / 86400).toFixed(2)}/Days</div>):(<div>Not Staked</div>)}
-                    
                 </div>
             </div>
-            {userStakedGurts.includes(element) ? (
-                <div onClick={() => callWithdrawToken([element])} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
-                    <div className="m-auto text-white text-2xl">Withdraw</div>
+            <div className="grow"/>
+            <div className="flex gap-4">
+                <div onClick={userStakedGurts.includes(element) ? () => callWithdrawToken([element]) : () => callDepositGurts([element])} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
+                    <div className="m-auto text-white text-2xl">{userStakedGurts.includes(element) ? (<>Withdraw</>):(<>Deposit</>)}</div>
                 </div>
-            ):(
-                <div onClick={() => callDepositGurts([element])} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
-                    <div className="m-auto text-white text-2xl">Deposit</div>
+                <div onClick={() => setDashboardState(1)} className="h-16 bg-blue-400 hover:bg-blue-300 active:bg-blue-400 transition-all rounded-xl flex cursor-pointer">
+                    <TbStack3 className="w-16 m-auto text-white text-2xl"/>
                 </div>
-            )}
-            
+            </div>
         </div>
     );
 
@@ -190,8 +229,8 @@ export default function Navbar() {
                 </div>
             </Link>
         </div>
-        <div className="h-[2000px] lg:h-screen bg-[#765050] flex visible">
-            <div className="w-full mx-5 2xl:mx-64 my-32 drop-shadow-xl grid grid-cols-1 lg:grid-cols-3 visible gap-10">
+        <div className="h-[2000px] lg:h-screen min-h-[900px] bg-pink-300 flex visible">
+            <div className="w-full mx-5 2xl:mx-64 my-28 drop-shadow-xl grid grid-cols-1 lg:grid-cols-3 visible gap-10">
                 <div className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full lg:h-[80%] m-auto p-10 flex flex-col max-w-[400px] lg:max-w-none" : "bg-orange-100 m-10 rounded-xl opacity-0 transition-all translate-x-96 invisible flex flex-col"}>
                     <div className="text-black mx-auto mt-auto font-bold text-center text-4xl mb-10">Collection Staked</div>
                     <div className="w-48 lg:w-52 xl:w-64 mx-auto mb-10">
@@ -208,24 +247,82 @@ export default function Navbar() {
                     <div className="text-black mx-auto font-bold text-4xl">Total</div>
                     <div className="text-[#8f6464] mx-auto mb-auto font-bold text-3xl">{totalStaked}/{gurtsTotalSupply}</div>
                 </div>
-                <div onClick={requestAccount} className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full m-auto flex p-10 max-w-[400px] lg:max-w-none" : "m-auto text-black font-bold flex p-2 rounded bg-orange-100 hover:bg-orange-200 cursor-pointer select-none transition-all visible opacity-100 w-24 h-10 delay-100"}>
+                <div onClick={requestAccount} className={connectedWallet !== undefined ? "bg-orange-100 rounded-xl transition-all w-full h-full m-auto flex flex-col max-w-[400px] lg:max-w-none p-10" : "m-auto text-black font-bold flex p-2 rounded bg-orange-100 hover:bg-orange-200 cursor-pointer select-none transition-all visible opacity-100 w-24 h-10 delay-100"}>
                     {connectedWallet !== undefined ?
                         (
-                            <div className="m-auto text-black font-bold select-none flex flex-col">
-                                <div className="text-black mx-auto mt-auto font-bold text-4xl mb-2">Your Tokens</div>
-                                <form className="flex translate-y-6 z-[1]">
-                                    <select
-                                        value={selectedToken}
-                                        onChange={handleTokenSelection}
-                                        className="focus:outline-none bg-blue-400 text-white m-auto py-2 px-10 rounded-xl mb-2 drop-shadow-lg"
-                                    >
-                                        {userAllTokens.map((element, index) =>
-                                            <option key={index} className="">{element}</option>
-                                        )}
-                                    </select>
-                                </form>
-                                {tokenCards[selectedToken]}
-                            </div>
+                            <>
+                                {dashboardState == 0 ? (
+                                    <div className="m-auto text-black font-bold select-none flex flex-col w-full h-full">
+                                        <div className="text-black mx-auto mt-auto font-bold text-3xl">Your Tokens</div>
+                                        <form className="flex translate-y-6 z-[1]">
+                                            <select
+                                                value={selectedToken}
+                                                onChange={handleTokenSelection}
+                                                className="focus:outline-none bg-red-400 text-white m-auto py-2 px-10 rounded-xl mb-2 drop-shadow-lg"
+                                            >
+                                                {userAllTokens.map((element, index) =>
+                                                    <option key={index} className="text-lg">{element}</option>
+                                                )}
+                                            </select>
+                                        </form>
+                                        {tokenCards[selectedToken]}
+                                    </div>
+                                ):(
+                                    <div className="m-auto text-black font-bold select-none w-full h-full">
+                                        <div className="flex flex-col gap-5 w-full h-full">
+                                            <div className="text-black mx-auto font-bold text-3xl">Batch Stake/Unstake</div>
+                                            <div className="flex gap-5 text-white m-auto">
+                                                <div onClick={() => setBatchOption(0)} className={batchOption == 0 ? "bg-blue-500 px-4 py-2 rounded-full transition-all" : "p-2 text-black transition-all"}>Deposit</div>
+                                                <div onClick={() => setBatchOption(1)} className={batchOption == 1 ? "bg-blue-500 px-4 py-2 rounded-full transition-all" : "p-2 text-black transition-all"}>Withdraw</div>
+                                            </div>
+                                            {batchOption == 0 ? (
+                                                <div>
+                                                    <div className="bg-red-400 text-white px-2 rounded-xl my-1 grid grid-cols-3 text-sm">
+                                                        <div>token #</div>
+                                                        <div>Current Stake</div>
+                                                        <div>Total Stake</div>
+                                                    </div>
+                                                        <div className="max-h-[400px] overflow-y-auto">
+                                                        {userGurts.map((element, index) => 
+                                                            <div index={index} onClick={() => handleSelectedDeposit(element)} className={selectedDeposit.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
+                                                                <div>#{element}</div>
+                                                                <div>Not Staked</div>
+                                                                <div>{(userTokensData[userAllTokens.indexOf(element)][2] / 86400).toFixed(2)}/d</div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            ):(
+                                                <div>
+                                                    <div className="bg-red-400 text-white px-2 rounded-xl my-1 grid grid-cols-3 text-sm">
+                                                        <div>token #</div>
+                                                        <div>Current Stake</div>
+                                                        <div>Total Stake</div>
+                                                    </div>
+                                                        <div className="max-h-[400px] overflow-y-auto">
+                                                        {userStakedGurts.map((element, index) => 
+                                                            <div index={index} onClick={() => handleSelectWithdraw(element)} className={selectedWithdraw.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
+                                                                <div>#{element}</div>
+                                                                <div>{((Math.floor(Date.now() / 1000) - userTokensData[userAllTokens.indexOf(element)][1]) / 86400).toFixed(2)}/d</div>
+                                                                <div>{(userTokensData[userAllTokens.indexOf(element)][2] / 86400).toFixed(2)}/d</div>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+                                            <div className="grow"/>
+                                            <div className="flex gap-4">
+                                                <div onClick={batchOption == 0 ? () => callWithdrawToken(selectedWithdraw) : () => callDepositGurts(selectedDeposit)} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
+                                                    <div className="m-auto text-white text-2xl">{batchOption == 0 ? (<>Deposit</>):(<>Withdraw</>)}</div>
+                                                </div>
+                                                <div onClick={() => setDashboardState(0)} className="h-16 bg-blue-400 hover:bg-blue-300 active:bg-blue-400 transition-all rounded-xl flex cursor-pointer">
+                                                    <TbStack className="w-16 m-auto text-white text-2xl"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+                            </>
                         ):(
                             <div className="m-auto select-none">Connect</div>
                         )}
