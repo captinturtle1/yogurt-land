@@ -141,6 +141,7 @@ export default function Navbar() {
 
     const callWithdrawToken = (tokenArray) => {
         withdrawGurts(tokenArray).then(tx => {
+            setSelectedWithdraw([...[]]);
             console.log(tx);
             tx.wait(1).then(response => {
                 console.log(response);
@@ -152,6 +153,7 @@ export default function Navbar() {
 
     const callDepositGurts = (tokenArray) => {
         depositGurts(tokenArray).then(tx => {
+            setSelectedDeposit([...[]]);
             console.log(tx);
             tx.wait(1).then(response => {
                 console.log(response);
@@ -187,12 +189,10 @@ export default function Navbar() {
 
     const tokenCards = userAllTokens.map((element, index) => 
         <div className="flex flex-col w-full h-full gap-5">
-            <div key={index} className="bg-[#765050] p-8 rounded-xl drop-shadow-lg m-auto">
-                <div className="relative">
-                    <img src={userTokensData[index] === undefined ? "placeholder.png" : userTokensData[index][0]} className="rounded-xl object-cover animate-introSlide"/>
-                    <div className="absolute -left-2 bottom-8 w-32 bg-red-400 text-white text-center text-3xl drop-shadow">Gurt #{element}</div>
-                </div>
-                <div className="mt-6 lg:text-lg text-white">
+            <div key={element} className="bg-[#765050] p-8 rounded-xl drop-shadow-lg m-auto relative">
+                <img src={userTokensData[index] === undefined ? "placeholder.png" : userTokensData[index][0]} className="h-80 w-80 lg:h-[17vw] lg:w-[17vw] rounded-xl object-cover animate-introSlide z-[11]"/>
+                <div className="absolute -left-2 top-[55%] w-32 bg-red-400 text-white text-center text-3xl drop-shadow">Gurt #{element}</div>
+                <div className="mt-6 xl:text-lg text-white">
                     <div>Total Stake: {userTokensData[index] === undefined ? "fetching..." : (userTokensData[index][2] / 86400).toFixed(2)}/Days</div>
                     {userTokensData[index] === undefined ? "fetching..." : userTokensData[index][1] != 0 ? (<div>Current Stake: {((Math.floor(Date.now() / 1000) - userTokensData[index][1]) / 86400).toFixed(2)}/Days</div>):(<div>Not Staked</div>)}
                 </div>
@@ -260,8 +260,8 @@ export default function Navbar() {
                                                 onChange={handleTokenSelection}
                                                 className="focus:outline-none bg-red-400 text-white m-auto py-2 px-10 rounded-xl mb-2 drop-shadow-lg"
                                             >
-                                                {userAllTokens.map((element, index) =>
-                                                    <option key={index} className="text-lg">{element}</option>
+                                                {userAllTokens.map((element) =>
+                                                    <option key={element} className="text-lg">{element}</option>
                                                 )}
                                             </select>
                                         </form>
@@ -283,8 +283,8 @@ export default function Navbar() {
                                                         <div>Total Stake</div>
                                                     </div>
                                                         <div className="max-h-[400px] overflow-y-auto">
-                                                        {userGurts.map((element, index) => 
-                                                            <div index={index} onClick={() => handleSelectedDeposit(element)} className={selectedDeposit.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
+                                                        {userGurts.map((element) => 
+                                                            <div index={element} onClick={() => handleSelectedDeposit(element)} className={selectedDeposit.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
                                                                 <div>#{element}</div>
                                                                 <div>Not Staked</div>
                                                                 <div>{(userTokensData[userAllTokens.indexOf(element)][2] / 86400).toFixed(2)}/d</div>
@@ -300,8 +300,8 @@ export default function Navbar() {
                                                         <div>Total Stake</div>
                                                     </div>
                                                         <div className="max-h-[400px] overflow-y-auto">
-                                                        {userStakedGurts.map((element, index) => 
-                                                            <div index={index} onClick={() => handleSelectWithdraw(element)} className={selectedWithdraw.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
+                                                        {userStakedGurts.map((element) => 
+                                                            <div index={element} onClick={() => handleSelectWithdraw(element)} className={selectedWithdraw.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
                                                                 <div>#{element}</div>
                                                                 <div>{((Math.floor(Date.now() / 1000) - userTokensData[userAllTokens.indexOf(element)][1]) / 86400).toFixed(2)}/d</div>
                                                                 <div>{(userTokensData[userAllTokens.indexOf(element)][2] / 86400).toFixed(2)}/d</div>
@@ -312,7 +312,7 @@ export default function Navbar() {
                                             )}
                                             <div className="grow"/>
                                             <div className="flex gap-4">
-                                                <div onClick={batchOption == 0 ? () => callWithdrawToken(selectedWithdraw) : () => callDepositGurts(selectedDeposit)} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
+                                                <div onClick={batchOption == 0 ?  () => callDepositGurts(selectedDeposit) : () => callWithdrawToken(selectedWithdraw)} className="w-full h-16 bg-red-400 hover:bg-red-300 active:bg-red-400 transition-all rounded-xl flex cursor-pointer">
                                                     <div className="m-auto text-white text-2xl">{batchOption == 0 ? (<>Deposit</>):(<>Withdraw</>)}</div>
                                                 </div>
                                                 <div onClick={() => setDashboardState(0)} className="h-16 bg-blue-400 hover:bg-blue-300 active:bg-blue-400 transition-all rounded-xl flex cursor-pointer">
