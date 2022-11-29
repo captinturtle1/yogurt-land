@@ -104,7 +104,7 @@ export default function Navbar() {
                 getUserTokensStaked(accounts[0]).then(staked => {
                     console.log("userTokensStaked: ", staked);
                     setUserStakedGurts([...staked]);
-                    let sortedTokensArray = active.concat(staked).sort()
+                    let sortedTokensArray = active.concat(staked).sort();
                     setUserAllTokens([...sortedTokensArray]);
                     setSelectedToken(sortedTokensArray[0]);
                     getTokenData(sortedTokensArray);
@@ -274,9 +274,10 @@ export default function Navbar() {
                             maxValue={gurtsTotalSupply}
                             strokeWidth={14}
                             styles={{
-                                path: {stroke: `#8f6464`, strokeLinecap: 'butt', transition: 'stroke-dashoffset 0.5s ease 0s', transform: 'rotate(0.50turn)', transformOrigin: 'center center'},
-                                trail: {stroke: '#8f646480', strokeLinecap: 'butt', transform: 'rotate(0.50turn)', transformOrigin: 'center center'},
+                                path: {stroke: `#5e3f3f`, strokeLinecap: 'butt', transition: 'stroke-dashoffset 0.5s ease 0s', transform: 'rotate(0.50turn)', transformOrigin: 'center center'},
+                                trail: {stroke: '#8f6464', strokeLinecap: 'butt', transform: 'rotate(0.50turn)', transformOrigin: 'center center'},
                             }}
+                            className="drop-shadow-lg"
                         ><div className="font-bold text-5xl text-[#765050]">{(totalStaked / gurtsTotalSupply) * 100}%</div></CircularProgressbarWithChildren>
                     </div>
                     <div className="text-black mx-auto font-bold text-4xl">Total</div>
