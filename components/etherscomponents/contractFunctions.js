@@ -5,20 +5,117 @@ import gurtsAbi from './gurtsAbi.json';
 import stakeAbi from './stakeAbi.json';
 import { gurtsContract, stakeContract, lowerAddresses } from "./config";
 
-export const getGurtsTotalSupply = () => new Promise(async resolve => {
+export const getGurtsTotalSupply = () => new Promise(async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
         let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
 
         let supply = await contract.totalSupply();
-        resolve(supply.toString());
+        resolve(parseInt(supply.toString()));
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 });
 
-export const getbaseUri = () => new Promise(async resolve => {
+export const getGurtsMaxSupply = () => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let supply = await contract.maxSupply();
+        resolve(parseInt(supply.toString()));
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const getGurtsPrice = () => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let price = await contract.price();
+        resolve(parseInt(price.toString()));
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const getGurtsPrivateSale = () => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.privateSale();
+        resolve(status);
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const getGurtsPublicSale = () => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.publicSale();
+        resolve(status);
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const getGurtsPassSale = () => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.claimSale();
+        resolve(status);
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const getHasMintedPublic = (address) => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.hasMintedPublic(address);
+        resolve(status);
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const getHasMintedWhitelist = (address) => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.hasMintedWhitelist(address);
+        resolve(status);
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const getIsWhitelisted = (address) => {
+    return lowerAddresses.includes(address.toLowerCase());
+}
+
+
+
+export const getbaseUri = () => new Promise(async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -27,11 +124,11 @@ export const getbaseUri = () => new Promise(async resolve => {
         let baseURI = await contract.baseURI();
         resolve(baseURI.toString());
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 });
 
-export const getTotalStaked = () => new Promise(async resolve => {
+export const getTotalStaked = () => new Promise(async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -40,11 +137,11 @@ export const getTotalStaked = () => new Promise(async resolve => {
         let amountStaked = await contract.balanceOf(stakeContract);
         resolve(amountStaked.toString());
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 });
 
-export const getUserTokensGurts = (address) => new Promise (async resolve => {
+export const getUserTokensGurts = (address) => new Promise (async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -54,11 +151,11 @@ export const getUserTokensGurts = (address) => new Promise (async resolve => {
         let newArray = userTokens.map(element => parseInt(element.toString()))
         resolve(newArray);
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
 
-export const getUserTokensStaked = (address) => new Promise (async resolve => {
+export const getUserTokensStaked = (address) => new Promise (async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -68,11 +165,11 @@ export const getUserTokensStaked = (address) => new Promise (async resolve => {
         let newArray = stakedTokens.map(element => parseInt(element.toString()))
         resolve(newArray);
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
 
-export const getUserStakePoints = (address) => new Promise (async resolve => {
+export const getUserStakePoints = (address) => new Promise (async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -81,11 +178,11 @@ export const getUserStakePoints = (address) => new Promise (async resolve => {
         let points = await contract.stakePoints(address);
         resolve(points.toString());
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
 
-export const getTokenInfo = (tokenId) => new Promise (async resolve => {
+export const getTokenInfo = (tokenId) => new Promise (async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -95,11 +192,11 @@ export const getTokenInfo = (tokenId) => new Promise (async resolve => {
         let newArray = info.map(element => element.toString())
         resolve(newArray);
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
 
-export const depositGurts = (tokenIds) => new Promise (async resolve => {
+export const depositGurts = (tokenIds) => new Promise (async (resolve, reject) => {
     try {
         console.log("Depositing: ", tokenIds);
         let provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -109,11 +206,11 @@ export const depositGurts = (tokenIds) => new Promise (async resolve => {
     
         resolve(await contract.deposit(tokenIds));
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
 
-export const withdrawGurts = (tokenIds) => new Promise (async resolve => {
+export const withdrawGurts = (tokenIds) => new Promise (async (resolve, reject) => {
     try {
         console.log("Withdrawing: ", tokenIds);
         let provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -122,11 +219,11 @@ export const withdrawGurts = (tokenIds) => new Promise (async resolve => {
 
         resolve(await contract.withdraw(tokenIds));
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
 
-export const getApprovedStatus = (address) => new Promise (async resolve => {
+export const getApprovedStatus = (address) => new Promise (async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -135,11 +232,11 @@ export const getApprovedStatus = (address) => new Promise (async resolve => {
         let status = await contract.isApprovedForAll(address, stakeContract);
         resolve(status);
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
 
-export const approveStakeContract = () => new Promise (async resolve => {
+export const approveStakeContract = () => new Promise (async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
@@ -147,6 +244,6 @@ export const approveStakeContract = () => new Promise (async resolve => {
 
         resolve(await contract.setApprovalForAll(stakeContract, true));
     } catch(err) {
-        console.log(err);
+        reject(err);
     }
 })
