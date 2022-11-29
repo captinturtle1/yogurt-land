@@ -20,7 +20,9 @@ export default function Faq() {
             <div className="m-auto z-[2] text-white">
                 <div className="text-9xl font-bold flex just justify-center drop-shadow-lg">Faq</div>
                 <div className="w-full h-4 bg-[#8f6464] rounded-full my-10"></div>
-                <div className="w-auto lg:w-[600px] font-semibold text-lg lg:text-xl ">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam interdum tincidunt lectus luctus vestibulum. Donec mollis nisl nec elit vestibulum, ut rutrum purus aliquet.</div>
+                <div className="w-auto lg:w-[600px] font-semibold text-lg lg:text-xl flex">
+                    <div className="m-auto">Commonly asked questions</div>
+                </div>
             </div>
             <div className="z-[2] m-auto font-semibold lg:font-bold text-md lg:text-xl select-none transition-all text-white">
                 <div onClick={() => handleBoxClick(1)} className={currentBox != 1 ? "bg-[#8f6464] h-12 w-[80vw] lg:w-[600px] px-4 py-[10px] rounded-xl cursor-pointer transition-all relative visible my-2" : "bg-[#b18181] h-64 w-[80vw] lg:w-[600px] p-5 rounded-xl cursor-pointer items-center transition-all relative visible"}>
