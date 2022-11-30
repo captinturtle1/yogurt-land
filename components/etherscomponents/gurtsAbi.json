@@ -227,7 +227,7 @@
 		"inputs": [],
 		"name": "publicMint",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -455,7 +455,7 @@
 		],
 		"name": "whitelistMint",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -619,7 +619,26 @@
 				"type": "address"
 			}
 		],
-		"name": "hasMinted",
+		"name": "hasMintedPublic",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "hasMintedWhitelist",
 		"outputs": [
 			{
 				"internalType": "bool",

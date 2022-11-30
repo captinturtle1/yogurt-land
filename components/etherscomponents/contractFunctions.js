@@ -1,9 +1,25 @@
 import { ethers } from "ethers";
 import { MerkleTree } from "merkletreejs";
 import keccak256 from "keccak256";
+
+import yogurtverseAbi from './yogurtverseAbi.json';
 import gurtsAbi from './gurtsAbi.json';
 import stakeAbi from './stakeAbi.json';
-import { gurtsContract, stakeContract, lowerAddresses } from "./config";
+
+import { yogurtverseContract, gurtsContract, stakeContract, lowerAddresses } from "./config";
+
+export const getYGBalance = (address) => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(yogurtverseContract, yogurtverseAbi, signer);
+
+        let balance = await contract.balanceOf(address);
+        resolve(parseInt(balance.toString()));
+    } catch(err) {
+        reject(err);
+    }
+});
 
 export const getGurtsTotalSupply = () => new Promise(async (resolve, reject) => {
     try {
@@ -38,7 +54,7 @@ export const getGurtsPrice = () => new Promise(async (resolve, reject) => {
         let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
 
         let price = await contract.price();
-        resolve(parseInt(price.toString()));
+        resolve(price);
     } catch(err) {
         reject(err);
     }
@@ -109,9 +125,65 @@ export const getHasMintedWhitelist = (address) => new Promise(async (resolve, re
     }
 });
 
-export const getIsWhitelisted = (address) => {
-    return lowerAddresses.includes(address.toLowerCase());
-}
+export const getIsWhitelisted = (address) => new Promise(async (resolve, reject) => {
+    try {
+        resolve(lowerAddresses.includes(address.toLowerCase()));
+    } catch (err) {
+        reject(err);
+    }
+});
+
+
+
+export const mintPublic = () => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let price = await getGurtsPrice();
+
+        let status = await contract.publicMint({value: price.toString()});
+        status.wait(1).then(response => {
+            resolve(response);
+        });
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const mintWhitelist = () => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let price = await getGurtsPrice();
+        let proof = [];
+
+        let status = await contract.whitelistMint(proof, {value: price.toString()});
+        status.wait(1).then(response => {
+            resolve(response);
+        });
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const mintWithPass = (tokenIds) => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.passMint(tokenIds);
+        status.wait(1).then(response => {
+            resolve(response);
+        });
+    } catch(err) {
+        reject(err);
+    }
+});
 
 
 
