@@ -8,6 +8,24 @@ import stakeAbi from './stakeAbi.json';
 
 import { yogurtverseContract, gurtsContract, stakeContract, lowerAddresses } from "./config";
 
+export const genProof = (address) => new Promise(async (resolve, reject) => {
+    try {
+    let leafNodes = lowerAddresses.map(addr => keccak256(addr));
+    let merkleTree = new MerkleTree(leafNodes, keccak256, { sortPairs: true});
+    let index = lowerAddresses.indexOf(address.toLowerCase());
+
+    if (index != -1) {
+        let keccakAddress = leafNodes[index];
+        let hexProof = merkleTree.getHexProof(keccakAddress);
+        resolve(hexProof);
+    } else {
+        reject(`No proof for ${address}.`)
+    }
+    } catch (err) {
+        reject(err);
+    }
+});
+
 export const getYGBalance = (address) => new Promise(async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -152,14 +170,13 @@ export const mintPublic = () => new Promise(async (resolve, reject) => {
     }
 });
 
-export const mintWhitelist = () => new Promise(async (resolve, reject) => {
+export const mintWhitelist = (proof) => new Promise(async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
         let signer = provider.getSigner();
         let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
 
         let price = await getGurtsPrice();
-        let proof = [];
 
         let status = await contract.whitelistMint(proof, {value: price.toString()});
         status.wait(1).then(response => {
@@ -180,6 +197,19 @@ export const mintWithPass = (tokenIds) => new Promise(async (resolve, reject) =>
         status.wait(1).then(response => {
             resolve(response);
         });
+    } catch(err) {
+        reject(err);
+    }
+});
+
+export const checkIfClaimed = (tokenId) => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.passHasClaimed(tokenId);
+        resolve(status);
     } catch(err) {
         reject(err);
     }

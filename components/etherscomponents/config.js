@@ -4,7 +4,9 @@ export const stakeContract = "0xf79eE36Db4fE7129100a087493f2121Ba7763acB";
 
 const whitelistedAddresses =
 [
-
+    "0xDE768b5E21459CaeAEA7a9Ea96354FF361507dFB",
+    "0xd229eD9B9f68CeE3d0532bdc5b1f1C866daeD5d7",
+    "0xAEebD32CFC3979aFC08568c607B834B4bF7bBcD3"
 ];
 
 export const lowerAddresses = whitelistedAddresses.map(element => {

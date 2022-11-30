@@ -15,7 +15,9 @@ import {
   getIsWhitelisted,
   mintPublic,
   mintWhitelist,
-  mintWithPass
+  mintWithPass,
+  checkIfClaimed,
+  genProof
 } from './etherscomponents/contractFunctions';
 
 export default function Navbar() {
@@ -39,6 +41,10 @@ export default function Navbar() {
   
   const [tokenIds, setTokensIds] = useState("");
   const [validInput, setValidInput] = useState(false);
+
+  const [checkId, setCheckId] = useState(0);
+  const [isClaimed, setIsClaimed] = useState(0);
+
 
   useEffect(() => {
     // checks if ethereum provider is detected
@@ -153,8 +159,11 @@ export default function Navbar() {
   }
 
   const handleMintWhitelist = () => {
-    mintWhitelist().then(response => {
-      console.log(response);
+    genProof(connectedWallet).then(proof => {
+      console.log("your proof: ", proof);
+      mintWhitelist(proof).then(response => {
+        console.log(response);
+      }).catch(console.log);
     }).catch(console.log);
   }
 
@@ -169,6 +178,17 @@ export default function Navbar() {
     }
   }
 
+  const handleCheckIfClaimed = () => {
+    checkIfClaimed(checkId).then(response => {
+      console.log(response);
+      if (response) {
+        setIsClaimed(1);
+      } else {
+        setIsClaimed(2);
+      }
+    }).catch(console.log);
+  }
+
   const handleTokenIdInput = (e) => {
     setTokensIds(e.target.value);
     if (/^[0-9]+(,[0-9]+)*$/.test(e.target.value)) {
@@ -176,7 +196,16 @@ export default function Navbar() {
     } else {
       setValidInput(false);
     }
-    
+  }
+
+  const handleCheckTokenIdInput = (e) => {
+    if (e.target.value > 4443) {
+      setCheckId(4443);
+    } else if (e.target.value < 0) {
+      setCheckId(0);
+    } else {
+      setCheckId(e.target.value);
+    }
   }
 
   return (
@@ -196,7 +225,7 @@ export default function Navbar() {
               <div className="m-auto text-5xl">Connect</div>
             ):(
               <div className="mx-auto text-black flex flex-col">
-                <div className="mx-auto flex text-sm lg:text-xl gap-5 mb-32">
+                <div className="mx-auto flex text-sm lg:text-xl gap-5 mb-16">
 
                   <div onClick={() => setMintTab(0)} className={mintTab == 0 ?
                     "bg-green-400 text-white py-2 px-2 lg:px-5 rounded-xl select-none transition-all" :
@@ -259,7 +288,13 @@ export default function Navbar() {
                         {!hasMintedWhitelist ? (
                           <>
                             {privateSale ? (
-                              <div onClick={handleMintWhitelist} className="mx-auto mt-8 bg-green-500 hover:bg-green-400 px-5 py-2 rounded-xl text-white cursor-pointer select-none transition-all">Mint Whitelist</div>
+                              <>
+                                {isWhitelisted ? (
+                                  <div onClick={handleMintWhitelist} className="mx-auto mt-8 bg-green-500 hover:bg-green-400 px-5 py-2 rounded-xl text-white cursor-pointer select-none transition-all">Mint Whitelist</div>
+                                ):(
+                                  <div className="mx-auto mt-8 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">Not Whitelisted</div>
+                                )}
+                              </>
                             ):(
                               <div className="mx-auto mt-8 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">WL Not Live</div>
                             )}
@@ -293,17 +328,34 @@ export default function Navbar() {
                               />
                             </form>
                             {validInput ? (
-                              <div onClick={handleMintWithPass} className="mx-auto mt-8 bg-green-500 hover:bg-green-400 px-5 py-2 rounded-xl text-white cursor-pointer select-none transition-all">Claim</div>
+                              <div onClick={handleMintWithPass} className="mx-auto mt-2 bg-green-500 hover:bg-green-400 px-5 py-2 rounded-xl text-white cursor-pointer select-none transition-all">Claim</div>
                             ):(
-                              <div className="mx-auto mt-8 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">Claim</div>
+                              <div className="mx-auto mt-2 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">Claim</div>
                             )}
                           </>
                         ):(
-                          <div className="mx-auto mt-8 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">Claim Not Live</div>
+                          <div className="mx-auto mt-2 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">Claim Not Live</div>
                         )}
                       </>
                     ):(
-                      <div className="mx-auto mt-8 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">OOS</div>
+                      <div className="mx-auto mt-2 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">OOS</div>
+                    )}
+                    <form className="flex flex-col mx-auto mt-10">
+                      <div className="text-sm">Token Id</div>
+                      <input
+                        value={checkId}
+                        type="text"
+                        pattern="^[0-9]+(,[0-9]+)*$"
+                        onChange={handleCheckTokenIdInput}
+                        placeholder="token"
+                        className="w-32 pl-2 p-1 focus:outline-none rounded-lg bg-neutral-700 invalid:ring invalid:ring-red-300 invalid:text-red-400 text-sm text-white"
+                      />
+                    </form>
+                    <div onClick={handleCheckIfClaimed} className="mx-auto my-2 text-sm bg-sky-500 hover:bg-sky-400 px-3 py-1 rounded-xl text-white cursor-pointer select-none transition-all">Check</div>
+                    {isClaimed != 0 ? (
+                      <div className={isClaimed == 2 ? "mx-auto text-green-500" : "mx-auto text-red-500"}>{isClaimed == 2 ? <>Not claimed</> : <>Claimed</>}</div>
+                    ):(
+                      <></>
                     )}
                   </div>
                 ):(

@@ -105,8 +105,9 @@ export default function Navbar() {
                     console.log("userTokensStaked: ", staked);
                     setUserStakedGurts([...staked]);
                     let sortedTokensArray = active.concat(staked).sort();
+                    console.log("sortedTokensArray: ", sortedTokensArray);
                     setUserAllTokens([...sortedTokensArray]);
-                    setSelectedToken(sortedTokensArray[0]);
+                    setSelectedToken(0);
                     getTokenData(sortedTokensArray);
                 }).catch(console.log);
                 
