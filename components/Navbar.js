@@ -14,13 +14,13 @@ export default function Navbar() {
           <div className="font-bold my-auto text-2xl cursor-pointer">Gurts</div>
       </ScrollLink>
       <div className="m-auto hidden lg:flex gap-5 font-bold">
-          <ScrollLink to="Mint" spy={true} smooth={true} offset={0} duration={600} className="text-black hover:text-zinc-500 active:text-zinc-600 transition-all cursor-pointer">mint</ScrollLink>
-          <ScrollLink to="About" spy={true} smooth={true} offset={0} duration={600} className="text-black hover:text-zinc-500 active:text-zinc-600 transition-all cursor-pointer">about</ScrollLink>
-          <ScrollLink to="Faq" spy={true} smooth={true} offset={0} duration={600} className="text-black hover:text-zinc-500 active:text-zinc-600 transition-all cursor-pointer">faq</ScrollLink>
+          <ScrollLink to="Mint" spy={true} smooth={true} offset={0} duration={600} className="text-black hover:text-zinc-400 transition-all cursor-pointer">Mint</ScrollLink>
+          <ScrollLink to="About" spy={true} smooth={true} offset={0} duration={600} className="text-black hover:text-zinc-400 transition-all cursor-pointer">About</ScrollLink>
+          <ScrollLink to="Faq" spy={true} smooth={true} offset={0} duration={600} className="text-black hover:text-zinc-400 transition-all cursor-pointer">Faq</ScrollLink>
       </div>
       <div className="absolute right-0 h-16 hidden lg:flex mr-16">
 
-          <div className="m-auto bg-[#5e3f3f] px-5 py-2 text-gray-200 rounded-full font-bold cursor-wait">
+          <div className="m-auto bg-zinc-700 px-5 py-2 text-zinc-500 rounded-full font-bold cursor-wait">
             <a>Stake</a>
           </div>
 
@@ -32,11 +32,11 @@ export default function Navbar() {
     </div>
     <div className={mobileMenu ? "z-[9] fixed h-screen w-screen bg-[#8f6464] opacity-100 transition-all flex visible lg:invisible" : "z-[9] fixed h-screen w-screen bg-[#8f6464] opacity-0 transition-all invisible"}>
       <div className={mobileMenu ? "m-auto flex flex-col text-center font-bold opacity-100 text-3xl gap-10" : "m-auto flex flex-col text-center font-bold opacity-0 text-3xl gap-10"}>
-        <ScrollLink onClick={() => setMobileMenu(false)} to="Mint" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 active:text-zinc-400 transition-all cursor-pointer">mint</ScrollLink>
-        <ScrollLink onClick={() => setMobileMenu(false)} to="About" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 active:text-zinc-400 transition-all cursor-pointer">about</ScrollLink>
-        <ScrollLink onClick={() => setMobileMenu(false)} to="Faq" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 active:text-zinc-400 transition-all cursor-pointer">faq</ScrollLink>
+        <ScrollLink onClick={() => setMobileMenu(false)} to="Mint" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 transition-all cursor-pointer">mint</ScrollLink>
+        <ScrollLink onClick={() => setMobileMenu(false)} to="About" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 transition-all cursor-pointer">about</ScrollLink>
+        <ScrollLink onClick={() => setMobileMenu(false)} to="Faq" spy={true} smooth={true} offset={0} duration={600} className="text-white hover:text-zinc-300 transition-all cursor-pointer">faq</ScrollLink>
 
-          <div className="mt-10 bg-zinc-800 px-5 py-2 text-gray-900 rounded-full font-bold cursor-wait">
+          <div className="mt-10 bg-zinc-700 px-5 py-2 text-zinc-500 rounded-full font-bold cursor-wait">
             <a>Stake</a>
           </div>
 
