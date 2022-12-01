@@ -37,7 +37,7 @@ export default function Faq() {
                 </div>
                 <div onClick={() => handleBoxClick(3)} className={currentBox != 3 ? "bg-[#8f6464] h-12 w-[80vw] lg:w-[600px] px-4 py-[10px] rounded-xl cursor-pointer transition-all relative visible my-2" : "bg-[#b18181] h-80 w-[80vw] lg:w-[600px] p-5 rounded-xl cursor-pointer items-center transition-all relative visible"}>
                     <div className={currentBox == 3 ? "transition-all" : "grow transition-all"}>Utilities</div>
-                    <div className={currentBox == 3 ? "mt-5 opacity-100 visible transition-all delay-100" : "opacity-0 w-0 invisible"}>Staking your Gurt will allow you to earn $YOGURT over time, which will be used to unlock levels/roles in the discord, that will allow you to access new information, connection's, and alpha utility. Access through staking to some layers of the already formed YogurtVerse community, and making connections and learning new information along your journey.</div>
+                    <div className={currentBox == 3 ? "mt-5 opacity-100 visible transition-all delay-100" : "opacity-0 w-0 invisible"}>Staking your Gurt will allow you to earn $YOGURT over time, which will be used to unlock levels/roles in the discord, that will allow you to access new information, connections, and alpha utility. Access through staking to some layers of the already formed YogurtVerse community, and making connections and learning new information along your journey.</div>
                     <FiArrowDownRight className={currentBox == 3 ? "rotate-180 transition-all absolute bottom-5 right-5" : "rotate-0 absolute bottom-[12px] right-5 transition-all"}/>
                 </div>
             </div>
