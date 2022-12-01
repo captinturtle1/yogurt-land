@@ -32,7 +32,7 @@ export default function Faq() {
                 </div>
                 <div onClick={() => handleBoxClick(2)} className={currentBox != 2 ? "bg-[#8f6464] h-12 w-[80vw] lg:w-[600px] px-4 py-[10px] rounded-xl cursor-pointer transition-all relative visible my-2" : "bg-[#b18181] h-48 w-[80vw] lg:w-[600px] p-5 rounded-xl cursor-pointer items-center transition-all relative visible"}>
                     <div className={currentBox == 2 ? "transition-all" : "grow transition-all"}>Mint price</div>
-                    <div className={currentBox == 2 ? "mt-5 opacity-100 visible transition-all delay-100" : "opacity-0 w-0 invisible"}>.015 For WL and Public. 2 WL spots and 1 free mint for YV pass holders</div>
+                    <div className={currentBox == 2 ? "mt-5 opacity-100 visible transition-all delay-100" : "opacity-0 w-0 invisible"}>.015 For WL and Public. 1 WL spot and 1 free mint for YV pass holders</div>
                     <FiArrowDownRight className={currentBox == 2 ? "rotate-180 transition-all absolute bottom-5 right-5" : "rotate-0 absolute bottom-[12px] right-5 transition-all"}/>
                 </div>
                 <div onClick={() => handleBoxClick(3)} className={currentBox != 3 ? "bg-[#8f6464] h-12 w-[80vw] lg:w-[600px] px-4 py-[10px] rounded-xl cursor-pointer transition-all relative visible my-2" : "bg-[#b18181] h-80 w-[80vw] lg:w-[600px] p-5 rounded-xl cursor-pointer items-center transition-all relative visible"}>
