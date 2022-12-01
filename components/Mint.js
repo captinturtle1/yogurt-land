@@ -46,6 +46,7 @@ export default function Navbar() {
   const [isClaimed, setIsClaimed] = useState(0);
 
 
+
   useEffect(() => {
     // checks if ethereum provider is detected
     try{
@@ -199,8 +200,8 @@ export default function Navbar() {
   }
 
   const handleCheckTokenIdInput = (e) => {
-    if (e.target.value > 4443) {
-      setCheckId(4443);
+    if (e.target.value > 320) {
+      setCheckId(320);
     } else if (e.target.value < 0) {
       setCheckId(0);
     } else {
@@ -312,6 +313,7 @@ export default function Navbar() {
                 )}
                 {mintTab == 2 ? (
                   <div className="animate-introSlide flex flex-col">
+                    <div className="mx-auto mt-8">Price: Ξ0</div>
                     {totalSupply < maxSupply ? (
                       <>
                         {claimSale ? (

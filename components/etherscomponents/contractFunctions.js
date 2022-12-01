@@ -202,6 +202,8 @@ export const mintWithPass = (tokenIds) => new Promise(async (resolve, reject) =>
     }
 });
 
+
+
 export const checkIfClaimed = (tokenId) => new Promise(async (resolve, reject) => {
     try {
         let provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -215,6 +217,18 @@ export const checkIfClaimed = (tokenId) => new Promise(async (resolve, reject) =
     }
 });
 
+export const checkPassWLMinted = (tokenId) => new Promise(async (resolve, reject) => {
+    try {
+        let provider = new ethers.providers.Web3Provider(window.ethereum);
+        let signer = provider.getSigner();
+        let contract = new ethers.Contract(gurtsContract, gurtsAbi, signer);
+
+        let status = await contract.passWLMinted(tokenId);
+        resolve(parseInt(status.toString()));
+    } catch(err) {
+        reject(err);
+    }
+});
 
 
 export const getbaseUri = () => new Promise(async (resolve, reject) => {
