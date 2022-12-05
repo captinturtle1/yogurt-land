@@ -218,8 +218,8 @@ export default function Navbar() {
     }
 
     const tokenCards = userAllTokens.map((element, index) => 
-        <div className="flex flex-col w-full h-full gap-5">
-            <div key={element} className="bg-[#765050] p-8 rounded-xl drop-shadow-lg m-auto relative">
+        <div key={element} className="flex flex-col w-full h-full gap-5">
+            <div className="bg-[#765050] p-8 rounded-xl drop-shadow-lg m-auto relative">
                 <img src={userTokensData[index] === undefined ? "placeholder.png" : userTokensData[index][0]} className="h-80 w-80 lg:h-[17vw] lg:w-[17vw] rounded-xl object-cover animate-introSlide z-[11]"/>
                 <div className="absolute -left-2 top-[55%] w-32 bg-red-400 text-white text-center text-3xl drop-shadow">Gurt #{element}</div>
                 <div className="mt-6 xl:text-lg text-white">
@@ -336,7 +336,7 @@ export default function Navbar() {
                                                     </div>
                                                         <div className="max-h-[400px] overflow-y-auto">
                                                         {userGurts.map((element) => 
-                                                            <div index={element} onClick={() => handleSelectedDeposit(element)} className={selectedDeposit.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
+                                                            <div key={element} onClick={() => handleSelectedDeposit(element)} className={selectedDeposit.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
                                                                 <div>#{element}</div>
                                                                 <div>Not Staked</div>
                                                                 <div>{(userTokensData[userAllTokens.indexOf(element)][2] / 86400).toFixed(2)}/d</div>
@@ -353,7 +353,7 @@ export default function Navbar() {
                                                     </div>
                                                         <div className="max-h-[400px] overflow-y-auto">
                                                         {userStakedGurts.map((element) => 
-                                                            <div index={element} onClick={() => handleSelectWithdraw(element)} className={selectedWithdraw.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
+                                                            <div key={element} onClick={() => handleSelectWithdraw(element)} className={selectedWithdraw.includes(element) ? "bg-[#765050] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3" : "bg-[#8f6464] text-white p-2 rounded-xl my-1 transition-all cursor-pointer grid grid-cols-3"}>
                                                                 <div>#{element}</div>
                                                                 <div>{((Math.floor(Date.now() / 1000) - userTokensData[userAllTokens.indexOf(element)][1]) / 86400).toFixed(2)}/d</div>
                                                                 <div>{(userTokensData[userAllTokens.indexOf(element)][2] / 86400).toFixed(2)}/d</div>
