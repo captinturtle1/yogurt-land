@@ -68,6 +68,37 @@ export default function Navbar() {
         })
 
         getAccount();
+
+        getGurtsTotalSupply().then(response => {
+          console.log("Total Supply: ", response);
+          setTotalSupply(response);
+        }).catch(console.log);
+    
+        getGurtsMaxSupply().then(response => {
+          console.log("Max Supply: ", response);
+          setMaxSupply(response);
+        }).catch(console.log);
+    
+        getGurtsPrice().then(response => {
+          let inEther = ethers.utils.formatEther(response);
+          console.log("Gurts Price: ", inEther);
+          setPrice(inEther);
+        }).catch(console.log);
+    
+        getGurtsPrivateSale().then(response => {
+          console.log("Private Sale: ", response);
+          setPrivateSale(response);
+        }).catch(console.log);
+    
+        getGurtsPublicSale().then(response => {
+          console.log("Public Sale: ", response);
+          setPublicSale(response);
+        }).catch(console.log);
+    
+        getGurtsPassSale().then(response => {
+          console.log("Pass Sale: ", response);
+          setClaimSale(response);
+        }).catch(console.log);
       }
     } catch (err) {
         console.log(err);
@@ -75,42 +106,9 @@ export default function Navbar() {
     }
   },[connectedWallet]);
 
-  useEffect(() => {
-    getGurtsTotalSupply().then(response => {
-      console.log("Total Supply: ", response);
-      setTotalSupply(response);
-    }).catch(console.log);
-
-    getGurtsMaxSupply().then(response => {
-      console.log("Max Supply: ", response);
-      setMaxSupply(response);
-    }).catch(console.log);
-
-    getGurtsPrice().then(response => {
-      let inEther = ethers.utils.formatEther(response);
-      console.log("Gurts Price: ", inEther);
-      setPrice(inEther);
-    }).catch(console.log);
-
-    getGurtsPrivateSale().then(response => {
-      console.log("Private Sale: ", response);
-      setPrivateSale(response);
-    }).catch(console.log);
-
-    getGurtsPublicSale().then(response => {
-      console.log("Public Sale: ", response);
-      setPublicSale(response);
-    }).catch(console.log);
-
-    getGurtsPassSale().then(response => {
-      console.log("Pass Sale: ", response);
-      setClaimSale(response);
-    }).catch(console.log);
-  }, [])
-
-  const requestAccount = async () => {
+  const requestAccount = () => {
     try {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
+        window.ethereum.request({ method: "eth_requestAccounts" });
     } catch (err) {
         console.log(err);
     }
@@ -219,8 +217,8 @@ export default function Navbar() {
         <div className="bg-white grow h-[600px] my-0 xl:my-auto mx-10 lg:mx-40 rounded-3xl drop-shadow-xl flex flex-col">
           <img src="strawberry.png" className="absolute w-16 bottom-16 right-16 animate-wiggle"/>
           <div onClick={requestAccount} className={connectedWallet == "" ?
-              "text-white m-auto flex font-bold bg-slate-700 hover:bg-slate-800 h-20 w-64 rounded-xl transition-all opacity-100 visible cursor-pointer select-none" :
-              "text-white m-auto flex font-bold h-[80%] w-[80%] rounded-xl transition-all"
+              "text-white m-auto flex font-bold bg-slate-700 hover:bg-slate-800 h-20 w-64 rounded-xl transition-all cursor-pointer select-none" :
+              "text-white m-auto flex font-bold bg-white h-[50%] w-[100%] rounded-xl transition-all"
           }>
             {connectedWallet == "" ? (
               <div className="m-auto text-5xl">Connect</div>
@@ -313,7 +311,7 @@ export default function Navbar() {
                 )}
                 {mintTab == 2 ? (
                   <div className="animate-introSlide flex flex-col">
-                    <div className="mx-auto mt-8">Price: Ξ0</div>
+                    <div className="mx-auto mt-12">Price: Ξ0</div>
                     {totalSupply < maxSupply ? (
                       <>
                         {claimSale ? (
