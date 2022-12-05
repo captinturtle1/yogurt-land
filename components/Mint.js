@@ -70,33 +70,33 @@ export default function Navbar() {
         getAccount();
 
         getGurtsTotalSupply().then(response => {
-          console.log("Total Supply: ", response);
+          //console.log("Total Supply: ", response);
           setTotalSupply(response);
         }).catch(console.log);
     
         getGurtsMaxSupply().then(response => {
-          console.log("Max Supply: ", response);
+          //console.log("Max Supply: ", response);
           setMaxSupply(response);
         }).catch(console.log);
     
         getGurtsPrice().then(response => {
           let inEther = ethers.utils.formatEther(response);
-          console.log("Gurts Price: ", inEther);
+          //console.log("Gurts Price: ", inEther);
           setPrice(inEther);
         }).catch(console.log);
     
         getGurtsPrivateSale().then(response => {
-          console.log("Private Sale: ", response);
+          //console.log("Private Sale: ", response);
           setPrivateSale(response);
         }).catch(console.log);
     
         getGurtsPublicSale().then(response => {
-          console.log("Public Sale: ", response);
+          //console.log("Public Sale: ", response);
           setPublicSale(response);
         }).catch(console.log);
     
         getGurtsPassSale().then(response => {
-          console.log("Pass Sale: ", response);
+          //console.log("Pass Sale: ", response);
           setClaimSale(response);
         }).catch(console.log);
       }
@@ -125,22 +125,22 @@ export default function Navbar() {
 
           getHasMintedPublic(accounts[0]).then(response => {
             setHasMintedPublic(response);
-            console.log("Minted Public: ",  response);
+            //console.log("Minted Public: ",  response);
           }).catch(console.log);
 
           getHasMintedWhitelist(accounts[0]).then(response => {
             setHasMintedWhitelist(response);
-            console.log("Minted Whitelist: ",  response);
+            //console.log("Minted Whitelist: ",  response);
           }).catch(console.log);
 
           getIsWhitelisted(accounts[0]).then(response => {
             setIsWhitelisted(response);
-            console.log("Is Whitelisted: ",  response);
+            //console.log("Is Whitelisted: ",  response);
           }).catch(console.log);
 
           getYGBalance(accounts[0]).then(response => {
             setYGBalance(response);
-            console.log("YG Balance: ",  response);
+            //console.log("YG Balance: ",  response);
           }).catch(console.log);
         } else {
           console.log("no account connected");
@@ -159,7 +159,7 @@ export default function Navbar() {
 
   const handleMintWhitelist = () => {
     genProof(connectedWallet).then(proof => {
-      console.log("your proof: ", proof);
+      //console.log("your proof: ", proof);
       mintWhitelist(proof).then(response => {
         console.log(response);
       }).catch(console.log);
@@ -170,7 +170,7 @@ export default function Navbar() {
     if (/^[0-9]+(,[0-9]+)*$/.test(tokenIds)) {
       let stringArray = tokenIds.split(",");
       let numberArray = stringArray.map(element => parseInt(element))
-      console.log(numberArray);
+      //console.log(numberArray);
       mintWithPass(numberArray).then(response => {
         console.log(response);
       }).catch(console.log);
@@ -179,7 +179,7 @@ export default function Navbar() {
 
   const handleCheckIfClaimed = () => {
     checkIfClaimed(checkId).then(response => {
-      console.log(response);
+      //console.log(response);
       if (response) {
         setIsClaimed(1);
       } else {
@@ -247,13 +247,13 @@ export default function Navbar() {
                   <div className="bg-green-700 absolute flex rounded-xl" style={{width: 500, height: 30}}>
                     <div className="m-auto text-white z-[1]">{totalSupply}/{maxSupply}</div>
                   </div>
-                  <div className="bg-green-500 absolute rounded-xl" style={{width: 500 * ((totalSupply < 180 ? 180 : totalSupply) / maxSupply), height: 30}}></div>
+                  <div className="bg-green-500 absolute rounded-xl" style={{width: totalSupply > 0 && maxSupply > 0 ? (500 * ((totalSupply < 180 ? 180 : totalSupply) / maxSupply)) : 180, height: 30}}></div>
                 </div>
                 <div className="mx-auto w-[300px] h-[30px] relative block 2xl:hidden">
                   <div className="bg-green-700 absolute flex rounded-xl" style={{width: 300, height: 30}}>
                     <div className="m-auto text-white z-[1]">{totalSupply}/{maxSupply}</div>
                   </div>
-                  <div className="bg-green-500 absolute rounded-xl" style={{width: 300 * ((totalSupply < 180 ? 180 : totalSupply) / maxSupply), height: 30}}></div>
+                  <div className="bg-green-500 absolute rounded-xl" style={{width: totalSupply > 0 && maxSupply > 0 ? (300 * ((totalSupply < 180 ? 180 : totalSupply) / maxSupply)) : 180, height: 30}}></div>
                 </div>
                 {mintTab == 0 ? (
                   <div className="animate-introSlide flex flex-col">
