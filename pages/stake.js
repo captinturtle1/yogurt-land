@@ -291,18 +291,26 @@ export default function Navbar() {
                                 {dashboardState == 0 ? (
                                     <div className="m-auto text-black font-bold select-none flex flex-col w-full h-full">
                                         <div className="text-black mx-auto mt-auto font-bold text-3xl">Your Tokens</div>
-                                        <form className="flex translate-y-6 z-[1]">
-                                            <select
-                                                value={selectedToken}
-                                                onChange={handleTokenSelection}
-                                                className="focus:outline-none bg-red-400 text-white m-auto py-2 px-10 rounded-xl mb-2 drop-shadow-lg"
-                                            >
-                                                {userAllTokens.map((element) =>
-                                                    <option key={element} className="text-lg">{element}</option>
-                                                )}
-                                            </select>
-                                        </form>
-                                        {tokenCards[selectedToken]}
+                                        {userAllTokens.length > 0 ? (
+                                            <>
+                                                <form className="flex translate-y-6 z-[1]">
+                                                    <select
+                                                        value={selectedToken}
+                                                        onChange={handleTokenSelection}
+                                                        className="focus:outline-none bg-red-400 text-white m-auto py-2 px-10 rounded-xl mb-2 drop-shadow-lg"
+                                                    >
+                                                        {userAllTokens.map((element) =>
+                                                            <option key={element} className="text-lg">{element}</option>
+                                                        )}
+                                                    </select>
+                                                </form>
+                                                {tokenCards[selectedToken]}
+                                            </>
+                                        ):(
+                                            <div className="text-2xl mx-auto mt-64 grow">
+                                                No gurts
+                                            </div>
+                                        )}
                                     </div>
                                 ):(
                                     <div className="m-auto text-black font-bold select-none w-full h-full">
