@@ -279,7 +279,7 @@ export default function Navbar() {
                                 trail: {stroke: '#8f6464', strokeLinecap: 'butt', transform: 'rotate(0.50turn)', transformOrigin: 'center center'},
                             }}
                             className="drop-shadow-lg"
-                        ><div className="font-bold text-5xl text-[#765050]">{(totalStaked / gurtsTotalSupply) * 100}%</div></CircularProgressbarWithChildren>
+                        ><div className="font-bold text-5xl text-[#765050]">{((totalStaked / gurtsTotalSupply) * 100).toPrecision(3)}%</div></CircularProgressbarWithChildren>
                     </div>
                     <div className="text-black mx-auto font-bold text-4xl">Total</div>
                     <div className="text-[#8f6464] mx-auto mb-auto font-bold text-3xl">{totalStaked}/{gurtsTotalSupply}</div>
