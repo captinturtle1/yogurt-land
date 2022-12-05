@@ -13,13 +13,13 @@ export default function Home() {
     <div className="overflow-hidden">
       <Head>
         <title>Gurts</title>
-        <meta name="description" content="Gurts webpage"/>
+        <meta name="description" content="The Gurts NFT homepage."/>
         <link rel="icon" href="/favicon.ico"/>
         <meta property="og:title" content="Gurts" />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://www.yogurtverse.xyz/" />
-        <meta property="og:image" content="https://www.yogurtverse.xyz/bglayer1.jpg" />
-        <meta property="og:description" content="Gurts webpage" />
+        <meta property="og:image" content="https://www.yogurtverse.xyz/yvlogoBanner.png" />
+        <meta property="og:description" content="The Gurts NFT homepage." />
         <meta name="theme-color" content="#F87171" />
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
