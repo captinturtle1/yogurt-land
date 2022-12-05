@@ -248,9 +248,16 @@ export default function Navbar() {
     return (
       <div>
         <Head>
-            <title>Gurts</title>
-            <meta name="description" content="Gurts webpage"/>
-            <link rel="icon" href="/favicon.ico"/>
+          <title>Gurts dashboard</title>
+          <meta name="description" content="The Gurts NFT dashboard."/>
+          <link rel="icon" href="/favicon.ico"/>
+          <meta property="og:title" content="Gurts" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://www.yogurtverse.xyz/" />
+          <meta property="og:image" content="https://www.yogurtverse.xyz/yvlogoBanner.png" />
+          <meta property="og:description" content="The Gurts NFT dashboard." />
+          <meta name="theme-color" content="#F87171" />
+          <meta name="twitter:card" content="summary_large_image" />
         </Head>
         <div className="z-[100] fixed top-0 w-screen flex h-16 bg-white text-black select-none">
             <div className="flex absolute h-16 ">
