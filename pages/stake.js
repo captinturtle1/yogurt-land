@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { useState, useEffect } from 'react';
-import { TbStack3, TbStack } from 'react-icons/Tb';
+import { TbStack3, TbStack } from 'react-icons/tb';
 import Head from 'next/head';
 import Link from 'next/link';
 
