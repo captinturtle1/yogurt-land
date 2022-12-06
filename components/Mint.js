@@ -1,5 +1,6 @@
 import { ethers } from 'ethers';
 import { useState, useEffect} from 'react';
+import { AiOutlineSearch } from 'react-icons/ai';
 
 import Wave from '../public/wave.svg';
 import {
@@ -218,7 +219,7 @@ export default function Navbar() {
           <img src="strawberry.png" className="absolute w-16 bottom-16 right-16 animate-wiggle"/>
           <div onClick={requestAccount} className={connectedWallet == "" ?
               "text-white m-auto flex font-bold bg-slate-700 hover:bg-slate-800 h-20 w-64 rounded-xl transition-all cursor-pointer select-none" :
-              "text-white m-auto flex font-bold bg-white h-[50%] w-[100%] rounded-xl transition-all"
+              "text-white m-auto flex font-bold bg-white h-[80%] w-[100%] rounded-xl transition-all"
           }>
             {connectedWallet == "" ? (
               <div className="m-auto text-5xl">Connect</div>
@@ -258,9 +259,9 @@ export default function Navbar() {
                 {mintTab == 0 ? (
                   <div className="animate-introSlide flex flex-col">
                     <div className="mx-auto mt-8">Price: Ξ{price}</div>
-                    {totalSupply < maxSupply ? (
+                    {totalSupply < maxSupply - 321 ? (
                       <>
-                        {!hasMintedPublic ? (
+                        {hasMintedPublic ? (
                           <>
                             {publicSale ? (
                               <div onClick={handleMintPublic} className="mx-auto mt-8 bg-green-500 hover:bg-green-400 px-5 py-2 rounded-xl text-white cursor-pointer select-none transition-all">Mint</div>
@@ -311,7 +312,7 @@ export default function Navbar() {
                 )}
                 {mintTab == 2 ? (
                   <div className="animate-introSlide flex flex-col">
-                    <div className="mx-auto mt-12">Price: Ξ0</div>
+                    <div className="mx-auto mt-8">Price: Ξ0.0</div>
                     {totalSupply < maxSupply ? (
                       <>
                         {claimSale ? (
@@ -340,20 +341,22 @@ export default function Navbar() {
                     ):(
                       <div className="mx-auto mt-2 bg-zinc-500 px-5 py-2 rounded-xl text-white select-none transition-all">OOS</div>
                     )}
-                    <form className="flex flex-col mx-auto mt-10">
-                      <div className="text-sm">Token Id</div>
-                      <input
-                        value={checkId}
-                        type="text"
-                        pattern="^[0-9]+(,[0-9]+)*$"
-                        onChange={handleCheckTokenIdInput}
-                        placeholder="token"
-                        className="w-32 pl-2 p-1 focus:outline-none rounded-lg bg-neutral-700 invalid:ring invalid:ring-red-300 invalid:text-red-400 text-sm text-white"
-                      />
-                    </form>
-                    <div onClick={handleCheckIfClaimed} className="mx-auto my-2 text-sm bg-sky-500 hover:bg-sky-400 px-3 py-1 rounded-xl text-white cursor-pointer select-none transition-all">Check</div>
+                    <form className="flex flex-col mx-auto mt-5">
+                      <div className="text-sm">Claim Check</div>
+                      <div className="flex gap-2">
+                        <input
+                          value={checkId}
+                          type="text"
+                          pattern="^[0-9]+(,[0-9]+)*$"
+                          onChange={handleCheckTokenIdInput}
+                          placeholder="token"
+                          className="w-32 pl-2 p-1 focus:outline-none rounded-lg bg-neutral-700 invalid:ring invalid:ring-red-300 invalid:text-red-400 text-sm text-white"
+                        />
+                        <div onClick={handleCheckIfClaimed} className="bg-sky-500 hover:bg-sky-400 rounded-xl text-lg p-2 text-white cursor-pointer select-none transition-all flex"><AiOutlineSearch className="m-auto"/></div>
+                      </div>
+                    </form>  
                     {isClaimed != 0 ? (
-                      <div className={isClaimed == 2 ? "mx-auto text-green-500" : "mx-auto text-red-500"}>{isClaimed == 2 ? <>Not claimed</> : <>Claimed</>}</div>
+                      <div className={isClaimed == 2 ? "mx-auto text-green-500 mt-2" : "mx-auto text-red-500 mt-2"}>{isClaimed == 2 ? <>Not claimed</> : <>Claimed</>}</div>
                     ):(
                       <></>
                     )}
