@@ -163,7 +163,7 @@ export default function Navbar() {
             </div>
             <Link href="/">
                 <div className="absolute right-0 h-16 flex mr-16">
-                    <div className="m-auto bg-[#765050] hover:bg-[#8f6464] active:bg-[#5e3f3f] px-5 py-2 text-white rounded-full font-bold transition-all cursor-pointer">
+                    <div className="m-auto bg-[#765050] hover:bg-[#8f6464] active:bg-[#5e3f3f] px-5 py-2 text-white rounded-xl font-bold transition-all cursor-pointer">
                         <a>Home</a>
                     </div>
                 </div>
